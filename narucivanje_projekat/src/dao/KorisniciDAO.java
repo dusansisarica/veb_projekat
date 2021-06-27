@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Korisnik;
+import beans.NormalanKupac;
 
 
 public class KorisniciDAO {
@@ -26,16 +27,6 @@ public class KorisniciDAO {
 	private static HashMap<String, Korisnik> korisnici = new HashMap<String, Korisnik>();
 	private static String putanja = System.getProperty("catalina.base") + File.separator + "Datoteke" + File.separator + "korisnici.json";
 	
-	public KorisniciDAO(){
-		File podaciDir = new File(System.getProperty("catalina.base") + File.separator + "Datoteke");
-		if (!podaciDir.exists()) {
-			podaciDir.mkdir();
-		}
-		//this.users = new LinkedHashMap<String, User>();
-		
-		// UNCOMMENT IF YOU WANT TO ADD MOCKUP DATA TO FILE addMockupData();
-	}
-
 	public KorisniciDAO(String contextPath) {
 		ucitajKorisnike(contextPath);
 	}
@@ -51,9 +42,11 @@ public class KorisniciDAO {
 
 			sviKorisnici = objectMapper.readValue(file, new TypeReference<ArrayList<Korisnik>>() {
 			});
+			int i = 0;
 			for (Korisnik k : sviKorisnici) {
-				System.out.println("KORISNICI");
+				System.out.println("KORISNICI" + i+1);
 				System.out.println(k.getKorisnickoIme());
+				i++;
 			}
 
 		} catch (JsonParseException e) {
@@ -71,10 +64,29 @@ public class KorisniciDAO {
 	
 	public static boolean upisiKorisnika(Korisnik korisnik) {
 
+		
 		if(korisnici.containsKey(korisnik.getKorisnickoIme())) {
 			return false;
 		}
+		if(korisnik.getKorisnickoIme() == null || korisnik.getKorisnickoIme() == "") {
+			return false;
+		}
+		if(korisnik.getLozinka() == null || korisnik.getLozinka() == "") {
+			return false;
+		}
+		if(korisnik.getDatumRodjenja() == null) {
+			return false;
+		}
+		if(korisnik.getIme() == null || korisnik.getIme() == "") {
+			return false;
+		}
+		if(korisnik.getPrezime() == null || korisnik.getPrezime() == "") {
+			return false;
+		}
 		
+		korisnik.setTipKupca(new NormalanKupac());
+		korisnik.setIdKorisnika(Integer.toString(korisnici.size()));
+		korisnik.setUloga("kupac");
 		ArrayList<Korisnik> sviKorisnici = new ArrayList<Korisnik>();
 		for (Korisnik k : korisnici.values()) {
 			sviKorisnici.add(k);

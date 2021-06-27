@@ -1,5 +1,8 @@
 package beans;
 import java.io.Serializable;
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 public class Korisnik implements Serializable {
@@ -13,18 +16,34 @@ public class Korisnik implements Serializable {
 	private String lozinka;
 	private String ime;
 	private String prezime;
+	private String uloga;
 	private boolean pol;
-	//TODO: Treba datutm rodjenja dodati
-	//TODO: Treba ulogu dodati : Administrator, Menadzer, Dostavljac, Kupac. Ja razmisljam o interfejsu ako bude bilo potrebe
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	private Date datumRodjenja;
+	private Object tipKupca;
 	//TODO: Sve porudzbine, verovatno lista porudzbina, ako je Kupac; to bi moglo preko interfejsa mozda
 	//TODO: Restoran, ako je Menadzer
 	//TODO: Porudzbine koje treba da dostavi, ako je dostavljac
 	//TODO: Broj sakupljenih bodova ako je Kupac
-	//TODO: Tip kupca : ime tipa, popust, trazeni broj bodova za sledeci nivo
 	public Korisnik() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	public Korisnik(String idKorisnika, String korisnickoIme, String lozinka, String ime, String prezime, String uloga,
+			boolean pol, Date datumRodjenja, Object tipKupca) {
+		super();
+		this.idKorisnika = idKorisnika;
+		this.korisnickoIme = korisnickoIme;
+		this.lozinka = lozinka;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.uloga = uloga;
+		this.pol = pol;
+		this.datumRodjenja = datumRodjenja;
+		this.tipKupca = tipKupca;
+	}
+
 	public String getKorisnickoIme() {
 		return korisnickoIme;
 	}
@@ -112,15 +131,25 @@ public class Korisnik implements Serializable {
 		return "Korisnik [korisnickoIme=" + korisnickoIme + ", lozinka=" + lozinka + ", ime=" + ime + ", prezime="
 				+ prezime + ", pol=" + pol + "]";
 	}
-	public Korisnik( String korisnickoIme, String lozinka, String ime, String prezime, boolean pol) {
-		super();
-		this.korisnickoIme = korisnickoIme;
-		this.lozinka = lozinka;
-		this.ime = ime;
-		this.prezime = prezime;
-		this.pol = pol;
+
+	public Date getDatumRodjenja() {
+		return datumRodjenja;
 	}
-	
+	public void setDatumRodjenja(Date datumRodjenja) {
+		this.datumRodjenja = datumRodjenja;
+	}
+	public String getUloga() {
+		return uloga;
+	}
+	public void setUloga(String uloga) {
+		this.uloga = uloga;
+	}
+	public Object getTipKupca() {
+		return tipKupca;
+	}
+	public void setTipKupca(Object tipKupca) {
+		this.tipKupca = tipKupca;
+	}
 	
 	
 }

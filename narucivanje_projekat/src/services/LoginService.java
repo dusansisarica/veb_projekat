@@ -14,9 +14,7 @@ import javax.ws.rs.core.Response;
 import java.util.Objects;
 
 import beans.Korisnik;
-import beans.User;
 import dao.KorisniciDAO;
-import dao.UserDAO;
 
 @Path("")
 public class LoginService {
@@ -46,11 +44,18 @@ public class LoginService {
 	public Response login(Korisnik korisnik, @Context HttpServletRequest request) {
 		KorisniciDAO korisniciDAO = (KorisniciDAO) ctx.getAttribute("korisniciDAO");
 		Korisnik ulogovaniKorisnik = KorisniciDAO.find(korisnik.getKorisnickoIme(), korisnik.getLozinka());
-		if (ulogovaniKorisnik != null) {
+		if (ulogovaniKorisnik == null) {
 			return Response.status(400).build();
 		}
-		request.getSession().setAttribute("user", ulogovaniKorisnik);
-		return Response.status(200).build();
+		else if (ulogovaniKorisnik.getUloga().equals("kupac")){
+			request.getSession().setAttribute("user", ulogovaniKorisnik);
+			return Response.status(200).entity("/pocetna").build();
+		}
+		else if (ulogovaniKorisnik.getUloga().equals("admin")){
+			request.getSession().setAttribute("user", ulogovaniKorisnik);
+			return Response.status(200).entity("/pocetna/admin").build();
+		}
+		return Response.status(400).build();
 	}
 	
 	
@@ -67,8 +72,8 @@ public class LoginService {
 	@Path("/currentUser")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public User login(@Context HttpServletRequest request) {
-		return (User) request.getSession().getAttribute("user");
+	public Korisnik login(@Context HttpServletRequest request) {
+		return (Korisnik) request.getSession().getAttribute("user");
 	}
 	
 	@POST
@@ -78,10 +83,10 @@ public class LoginService {
 	public Response registrujKorisnika(Korisnik korisnik, @Context HttpServletRequest request) {
 		KorisniciDAO korisniciDAO = (KorisniciDAO) ctx.getAttribute("korisniciDAO");
 		if(KorisniciDAO.upisiKorisnika(korisnik)) {
-			return Response.status(200).build();
+			return Response.status(200).entity("Uspe�no ste se registrovali!").build();
 		}
 		else {
-			return Response.status(400).build();
+			return Response.status(Response.Status.BAD_REQUEST).entity("Podaci nisu valjani").build();
 		}
 		
 	}
