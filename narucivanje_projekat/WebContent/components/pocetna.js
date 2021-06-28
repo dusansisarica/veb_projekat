@@ -1,4 +1,15 @@
 Vue.component("pocetna-strana", {
+    data: function(){
+        return {
+            restoran: {naziv : null, tipRestorana : null, statusRestorana : null, logoRestorana : null}
+        }
+    },
+
+    mounted : function(){
+        axios.get('/narucivanje/rest/restorani').
+        then(response => this.restoran = response.data);
+    },
+
     template: `
     <form>
         <nav class="navbar navbar-light bg-dark">
@@ -10,6 +21,14 @@ Vue.component("pocetna-strana", {
                 </div>    
             </div>
         </nav>
+        <table>
+            <td v-for="r in restoran">
+                <tr>{{r.naziv}}</tr>
+                <tr>{{r.tipRestorana}}</tr>
+                <tr>{{r.statusRestorana}}</tr>
+                <img width="42" height="42" :src="'slike/' + r.logoRestorana"/>
+            </td>
+        </table>
     </form>
     `,
 

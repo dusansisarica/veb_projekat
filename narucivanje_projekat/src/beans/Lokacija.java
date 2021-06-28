@@ -1,29 +1,29 @@
 package beans;
 
 public class Lokacija {
-	private double geografskaDuzina;
-	private double geografskaSirina;
+	private float geografskaDuzina;
+	private float geografskaSirina;
 	private String adresa;
 	public Lokacija() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Lokacija(double geografskaDuzina, double geografskaSirina, String adresa) {
+	public Lokacija(float geografskaDuzina, float geografskaSirina, String adresa) {
 		super();
 		this.geografskaDuzina = geografskaDuzina;
 		this.geografskaSirina = geografskaSirina;
 		this.adresa = adresa;
 	}
-	public double getGeografskaDuzina() {
+	public float getGeografskaDuzina() {
 		return geografskaDuzina;
 	}
-	public void setGeografskaDuzina(double geografskaDuzina) {
+	public void setGeografskaDuzina(float geografskaDuzina) {
 		this.geografskaDuzina = geografskaDuzina;
 	}
-	public double getGeografskaSirina() {
+	public float getGeografskaSirina() {
 		return geografskaSirina;
 	}
-	public void setGeografskaSirina(double geografskaSirina) {
+	public void setGeografskaSirina(float geografskaSirina) {
 		this.geografskaSirina = geografskaSirina;
 	}
 	public String getAdresa() {

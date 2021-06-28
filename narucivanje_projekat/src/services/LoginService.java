@@ -81,7 +81,6 @@ public class LoginService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response registrujKorisnika(Korisnik korisnik, @Context HttpServletRequest request) {
-		KorisniciDAO korisniciDAO = (KorisniciDAO) ctx.getAttribute("korisniciDAO");
 		if(KorisniciDAO.upisiKorisnika(korisnik)) {
 			return Response.status(200).entity("Uspe�no ste se registrovali!").build();
 		}

@@ -4,6 +4,7 @@ const Registracija = {template : '<registracija></registracija>'}
 const PocetnaKupac = {template : '<pocetna-kupac></pocetna-kupac>'}
 const PocetnaAdmin = {template : '<pocetna-admin></pocetna-admin>'}
 const ProfilAdmin = {template : '<profil-admin></profil-admin>'}
+const DodajRestoranAdmin = {template : '<dodaj-restoran></dodaj-restoran>'}
 
 
 const router = new VueRouter({
@@ -14,7 +15,8 @@ const router = new VueRouter({
 		{ path: '/registracija', component: Registracija},	
 		{ path: '/pocetna', component: PocetnaKupac},
 		{ path: '/pocetna/admin', component: PocetnaAdmin},
-		{ path: '/pocetna/admin/profil', component: ProfilAdmin}
+		{ path: '/pocetna/admin/profil', component: ProfilAdmin},
+		{ path: '/pocetna/admin/dodaj-restoran', component: DodajRestoranAdmin}
 	  ]
 });
 

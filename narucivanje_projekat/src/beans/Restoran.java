@@ -1,14 +1,20 @@
 package beans;
 
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Restoran {
+public class Restoran implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4810208769627288453L;
+	private String id;
 	private String naziv;
 	private TipRestorana tipRestorana;
 	private boolean statusRestorana; //0-ne radi, 1-radi
-	private BufferedImage logoRestorana;
+	private String logoRestorana;
 	private Lokacija lokacijaRestorana;
 	private List<Artikal> artikli = new ArrayList<Artikal>();
 
@@ -16,7 +22,7 @@ public class Restoran {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Restoran(String naziv, TipRestorana tipRestorana, boolean statusRestorana, BufferedImage logoRestorana,
+	public Restoran(String naziv, TipRestorana tipRestorana, boolean statusRestorana, String logoRestorana,
 			Lokacija lokacijaRestorana, List<Artikal> artikli) {
 		super();
 		this.naziv = naziv;
@@ -44,10 +50,10 @@ public class Restoran {
 	public void setStatusRestorana(boolean statusRestorana) {
 		this.statusRestorana = statusRestorana;
 	}
-	public BufferedImage getLogoRestorana() {
+	public String getLogoRestorana() {
 		return logoRestorana;
 	}
-	public void setLogoRestorana(BufferedImage logoRestorana) {
+	public void setLogoRestorana(String logoRestorana) {
 		this.logoRestorana = logoRestorana;
 	}
 	public Lokacija getLokacijaRestorana() {
@@ -61,6 +67,12 @@ public class Restoran {
 	}
 	public void setArtikli(List<Artikal> artikli) {
 		this.artikli = artikli;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 
