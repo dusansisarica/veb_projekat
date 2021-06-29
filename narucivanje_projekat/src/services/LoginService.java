@@ -13,8 +13,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Objects;
 
+import beans.Admin;
 import beans.Korisnik;
+
+import beans.KorisnikRegistracija;
+import beans.Kupac;
+import dao.AdminDAO;
 import dao.KorisniciDAO;
+import dao.KupacDAO;
+import dto.KorisnikUlogaDTO;
 
 @Path("")
 public class LoginService {
@@ -29,11 +36,19 @@ public class LoginService {
 	@PostConstruct
 	// ctx polje je null u konstruktoru, mora se pozvati nakon konstruktora (@PostConstruct anotacija)
 	public void init() {
-		// Ovaj objekat se instancira vi�e puta u toku rada aplikacije
+		// Ovaj objekat se instancira vie puta u toku rada aplikacije
 		// Inicijalizacija treba da se obavi samo jednom
 		if (ctx.getAttribute("korisniciDAO") == null) {
 	    	String contextPath = ctx.getRealPath("");
 			ctx.setAttribute("korisniciDAO", new KorisniciDAO(contextPath));
+		}
+		if (ctx.getAttribute("kupciDAO") == null) {
+	    	String contextPath = ctx.getRealPath("");
+			ctx.setAttribute("kupciDAO", new KupacDAO(contextPath));
+		}
+		if (ctx.getAttribute("adminiDAO") == null) {
+	    	String contextPath = ctx.getRealPath("");
+			ctx.setAttribute("adminiDAO", new AdminDAO(contextPath));
 		}
 	}
 	
@@ -41,17 +56,16 @@ public class LoginService {
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response login(Korisnik korisnik, @Context HttpServletRequest request) {
-		KorisniciDAO korisniciDAO = (KorisniciDAO) ctx.getAttribute("korisniciDAO");
-		Korisnik ulogovaniKorisnik = KorisniciDAO.find(korisnik.getKorisnickoIme(), korisnik.getLozinka());
+	public Response login(KorisnikRegistracija korisnik, @Context HttpServletRequest request) {
+		Korisnik ulogovaniKorisnik = KorisniciDAO.find(korisnik);
 		if (ulogovaniKorisnik == null) {
 			return Response.status(400).build();
 		}
-		else if (ulogovaniKorisnik.getUloga().equals("kupac")){
+		else if (ulogovaniKorisnik.getClass() == Kupac.class){
 			request.getSession().setAttribute("user", ulogovaniKorisnik);
 			return Response.status(200).entity("/pocetna").build();
 		}
-		else if (ulogovaniKorisnik.getUloga().equals("admin")){
+		else if (ulogovaniKorisnik.getClass() == Admin.class){
 			request.getSession().setAttribute("user", ulogovaniKorisnik);
 			return Response.status(200).entity("/pocetna/admin").build();
 		}
@@ -80,12 +94,12 @@ public class LoginService {
 	@Path("/registracija")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response registrujKorisnika(Korisnik korisnik, @Context HttpServletRequest request) {
+	public Response registrujKorisnika(KorisnikUlogaDTO korisnik, @Context HttpServletRequest request) {
 		if(KorisniciDAO.upisiKorisnika(korisnik)) {
-			return Response.status(200).entity("Uspe�no ste se registrovali!").build();
+			return Response.status(200).build();
 		}
 		else {
-			return Response.status(Response.Status.BAD_REQUEST).entity("Podaci nisu valjani").build();
+			return Response.status(400).build();
 		}
 		
 	}

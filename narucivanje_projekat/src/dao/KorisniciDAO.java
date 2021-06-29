@@ -19,14 +19,27 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Korisnik;
+import beans.KorisnikRegistracija;
+import beans.Kupac;
 import beans.NormalanKupac;
+import dto.KorisnikUlogaDTO;
 
 
 public class KorisniciDAO {
 
-	private static HashMap<String, Korisnik> korisnici = new HashMap<String, Korisnik>();
+	private static HashMap<String, KorisnikRegistracija> korisnici = new HashMap<String, KorisnikRegistracija>();
 	private static String putanja = System.getProperty("catalina.base") + File.separator + "Datoteke" + File.separator + "korisnici.json";
 	
+	public KorisniciDAO(){
+		File podaciDir = new File(System.getProperty("catalina.base") + File.separator + "Datoteke");
+		if (!podaciDir.exists()) {
+			podaciDir.mkdir();
+		}
+		//this.users = new LinkedHashMap<String, User>();
+		
+		// UNCOMMENT IF YOU WANT TO ADD MOCKUP DATA TO FILE addMockupData();
+	}
+
 	public KorisniciDAO(String contextPath) {
 		ucitajKorisnike(contextPath);
 	}
@@ -37,17 +50,12 @@ public class KorisniciDAO {
 
 		File file = new File(putanja);
 
-		ArrayList<Korisnik> sviKorisnici = new ArrayList<Korisnik>();
+		ArrayList<KorisnikRegistracija> sviKorisnici = new ArrayList<KorisnikRegistracija>();
 		try {
 
-			sviKorisnici = objectMapper.readValue(file, new TypeReference<ArrayList<Korisnik>>() {
+			sviKorisnici = objectMapper.readValue(file, new TypeReference<ArrayList<KorisnikRegistracija>>() {
 			});
-			int i = 0;
-			for (Korisnik k : sviKorisnici) {
-				System.out.println("KORISNICI" + i+1);
-				System.out.println(k.getKorisnickoIme());
-				i++;
-			}
+
 
 		} catch (JsonParseException e) {
 			e.printStackTrace();
@@ -57,41 +65,29 @@ public class KorisniciDAO {
 			e.printStackTrace();
 		}
 
-		for (Korisnik k : sviKorisnici) {
+		for (KorisnikRegistracija k : sviKorisnici) {
 			korisnici.put(k.getKorisnickoIme(), k);
 		}		
 	}
 	
-	public static boolean upisiKorisnika(Korisnik korisnik) {
-
+	public static boolean upisiKorisnika(KorisnikUlogaDTO korisnik) {
 		
-		if(korisnici.containsKey(korisnik.getKorisnickoIme())) {
+		if(korisnici.containsKey(korisnik.getKorisnikRegistracija().getKorisnickoIme())) {
 			return false;
 		}
-		if(korisnik.getKorisnickoIme() == null || korisnik.getKorisnickoIme() == "") {
+		if(korisnik.getKorisnikRegistracija().getKorisnickoIme() == null || korisnik.getKorisnikRegistracija().getKorisnickoIme() == "") {
 			return false;
 		}
-		if(korisnik.getLozinka() == null || korisnik.getLozinka() == "") {
-			return false;
-		}
-//		if(korisnik.getDatumRodjenja() == null) {
-//			return false;
-//		}
-		if(korisnik.getIme() == null || korisnik.getIme() == "") {
-			return false;
-		}
-		if(korisnik.getPrezime() == null || korisnik.getPrezime() == "") {
+		if(korisnik.getKorisnikRegistracija().getLozinka() == null || korisnik.getKorisnikRegistracija().getLozinka() == "") {
 			return false;
 		}
 		
-		korisnik.setTipKupca(new NormalanKupac());
-		korisnik.setIdKorisnika(Integer.toString(korisnici.size()));
-		korisnik.setUloga("kupac");
-		ArrayList<Korisnik> sviKorisnici = new ArrayList<Korisnik>();
-		for (Korisnik k : korisnici.values()) {
+		korisnik.getKorisnikRegistracija().setId(Integer.toString(korisnici.size()));
+		ArrayList<KorisnikRegistracija> sviKorisnici = new ArrayList<KorisnikRegistracija>();
+		for (KorisnikRegistracija k : korisnici.values()) {
 			sviKorisnici.add(k);
 		}
-		sviKorisnici.add(korisnik);
+		sviKorisnici.add(korisnik.getKorisnikRegistracija());
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
@@ -100,20 +96,35 @@ public class KorisniciDAO {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		if (korisnik.getKorisnikRegistracija().getUloga().equals("kupac")) {
+			return KupacDAO.upisiKupca(korisnik);
+		}
 		return true;
 	}
 	
-	public static Korisnik find(String username, String password) {
-		if (!korisnici.containsKey(username)) {
+	public static Korisnik find(KorisnikRegistracija korisnik) {
+		if (!korisnici.containsKey(korisnik.getKorisnickoIme())) {
 			return null;
 		}
-		Korisnik korisnik = korisnici.get(username);
-		if (!korisnik.getLozinka().equals(password)) {
+		KorisnikRegistracija korisnikReg = korisnici.get(korisnik.getKorisnickoIme());
+		if (!korisnikReg.getLozinka().equals(korisnik.getLozinka())) {
 			return null;
 		}
-		return korisnik;
+		
+		Korisnik k = new Korisnik();
+		switch (korisnikReg.getUloga()) {
+		case "kupac":
+			k = KupacDAO.nadjiKupca(korisnikReg.getId());
+			break;
+		case "admin":
+			k = AdminDAO.nadjiAdmina(korisnikReg.getId());
+			break;
+		default:
+			break;
+		}
+		
+		return k;
 	}
-	
 
 
 	

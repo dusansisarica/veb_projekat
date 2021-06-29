@@ -1,7 +1,9 @@
 Vue.component("registracija", {
     data: function () {
         return {
-          korisnik: {korisnickoIme: null, lozinka: null, ime: null, prezime: null, pol: false, datumRodjenja : null},
+          korisnik: {ime: null, prezime: null, pol: false, datumRodjenja : null},
+          korisnikRegistracija: {korisnickoIme: null, lozinka: null, uloga: "kupac"},
+          korisnikPomocna: {korisnik: null, korisnikRegistracija: null},
           poruka : "",
         }
     },
@@ -13,16 +15,17 @@ Vue.component("registracija", {
                 <a class="navbar-brand" style="color:white" href="http://localhost:8080/narucivanje/#/">Početna</a> 
             </div>
         </nav>
+
         <p>Registruj se:</p>
         <form>
             <table>
                 <tr>
                     <td>Korisničko ime:</td>
-                    <td><input type = "text" v-model="korisnik.korisnickoIme" name="korisnickoIme"></td>
+                    <td><input type = "text" v-model="korisnikRegistracija.korisnickoIme" name="korisnickoIme"></td>
                 </tr>
                 <tr>
                     <td>Lozinka:</td>
-                    <td><input type="password" v-model="korisnik.lozinka" name="lozinka"></td>
+                    <td><input type="password" v-model="korisnikRegistracija.lozinka" name="lozinka"></td>
                 </tr>
                 <tr>
                     <td>Ime:</td>
@@ -44,7 +47,7 @@ Vue.component("registracija", {
                 <tr>
                     <td>Datum rođenja:</td>
                     <td>
-                        <input type="date" v-model="korisnik.datumRodjenja"
+                        <input type="date" v-model="korisnik.datumRodjenja" 
                         min="1900-01-01" max="2021-06-26">
                     </td>
                 </tr>
@@ -61,7 +64,9 @@ Vue.component("registracija", {
     methods : {
         registrujKorisnika : function(){
             event.preventDefault();
-            axios.post(`rest/registracija`, this.korisnik).
+            this.korisnikPomocna.korisnik = this.korisnik;
+            this.korisnikPomocna.korisnikRegistracija = this.korisnikRegistracija;
+            axios.post(`rest/registracija`, this.korisnikPomocna).
             then(response => (this.poruka = response.data)). //router.push('/prijava')).
             catch(response => (this.poruka = response.data));
         },
@@ -73,6 +78,6 @@ Vue.component("registracija", {
             else{
                 this.korisnik.pol = true;
             }
-        },
+        }
     }
 }) ;
