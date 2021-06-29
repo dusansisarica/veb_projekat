@@ -74,9 +74,9 @@ public class KorisniciDAO {
 		if(korisnik.getLozinka() == null || korisnik.getLozinka() == "") {
 			return false;
 		}
-		if(korisnik.getDatumRodjenja() == null) {
-			return false;
-		}
+//		if(korisnik.getDatumRodjenja() == null) {
+//			return false;
+//		}
 		if(korisnik.getIme() == null || korisnik.getIme() == "") {
 			return false;
 		}

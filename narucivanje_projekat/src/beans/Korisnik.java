@@ -18,7 +18,7 @@ public class Korisnik implements Serializable {
 	private String prezime;
 	private String uloga;
 	private boolean pol;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private Date datumRodjenja;
 	private Object tipKupca;
 	//TODO: Sve porudzbine, verovatno lista porudzbina, ako je Kupac; to bi moglo preko interfejsa mozda
