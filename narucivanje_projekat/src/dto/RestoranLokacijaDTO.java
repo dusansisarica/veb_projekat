@@ -1,11 +1,19 @@
 package dto;
 
 import beans.Lokacija;
+import beans.Menadzer;
 import beans.Restoran;
 
 public class RestoranLokacijaDTO {
 	private Restoran restoran;
 	private Lokacija lokacija;
+	private String menadzerId;
+	public String getMenadzerId() {
+		return menadzerId;
+	}
+	public void setMenadzer(String menadzerId) {
+		this.menadzerId = menadzerId;
+	}
 	public RestoranLokacijaDTO() {
 		super();
 		// TODO Auto-generated constructor stub

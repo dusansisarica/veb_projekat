@@ -99,6 +99,10 @@ public class KorisniciDAO {
 		if (korisnik.getKorisnikRegistracija().getUloga().equals("kupac")) {
 			return KupacDAO.upisiKupca(korisnik);
 		}
+		if (korisnik.getKorisnikRegistracija().getUloga().equals("menadzer")) {
+			return MenadzeriDAO.upisiMenadzera(korisnik);
+		}
+
 		return true;
 	}
 	

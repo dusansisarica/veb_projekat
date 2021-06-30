@@ -62,6 +62,7 @@ public class RestoraniDAO {
 		Restoran restoran = restoranLokacija.getRestoran();
 		restoran.setLokacijaRestorana(restoranLokacija.getLokacija());
 		restoran.setId(Integer.toString(restorani.size()+1));
+		MenadzeriDAO.postaviMenadzeruRestoran(restoranLokacija);
 
 		restorani.put(restoran.getId(), restoran);
 		upisiRestorane(restorani);
