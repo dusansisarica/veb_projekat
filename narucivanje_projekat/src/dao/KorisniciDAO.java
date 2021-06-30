@@ -9,9 +9,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.validation.OverridesAttribute.List;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -22,6 +22,7 @@ import beans.Korisnik;
 import beans.KorisnikRegistracija;
 import beans.Kupac;
 import beans.NormalanKupac;
+import dto.KorisnikSaUlogom;
 import dto.KorisnikUlogaDTO;
 
 
@@ -135,6 +136,25 @@ public class KorisniciDAO {
 		}
 		
 		return k;
+	}
+	
+	public static List<KorisnikSaUlogom> dobaviSveKorisnike(){
+		List<KorisnikSaUlogom> sviKorisnici = new ArrayList<KorisnikSaUlogom>();
+		for(KorisnikRegistracija kr : korisnici.values()) {
+			if (kr.getUloga().equals("kupac")) {
+				sviKorisnici.add(new KorisnikSaUlogom(KupacDAO.nadjiKupca(kr.getId()), "kupac"));
+			}
+			else if(kr.getUloga().equals("menadzer")) {
+				sviKorisnici.add(new KorisnikSaUlogom(MenadzeriDAO.nadjiMenadzera(kr.getId()), "menadzer"));
+			}
+			else if(kr.getUloga().equals("dostavljac")) {
+				sviKorisnici.add(new KorisnikSaUlogom(DostavljaciDAO.nadjiDostavljaca(kr.getId()), "dostavljac"));
+			}
+			else if(kr.getUloga().equals("admin")) {
+				sviKorisnici.add(new KorisnikSaUlogom(AdminDAO.nadjiAdmina(kr.getId()), "admin"));
+			}
+		}
+		return sviKorisnici;
 	}
 
 

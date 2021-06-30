@@ -11,6 +11,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import java.util.List;
 import java.util.Objects;
 
 import beans.Admin;
@@ -22,6 +24,8 @@ import dao.AdminDAO;
 import dao.DostavljaciDAO;
 import dao.KorisniciDAO;
 import dao.KupacDAO;
+import dao.MenadzeriDAO;
+import dto.KorisnikSaUlogom;
 import dto.KorisnikUlogaDTO;
 
 @Path("")
@@ -54,6 +58,10 @@ public class LoginService {
 		if (ctx.getAttribute("dostavljaciDAO") == null) {
 	    	String contextPath = ctx.getRealPath("");
 			ctx.setAttribute("dostavljaciDAO", new DostavljaciDAO(contextPath));
+		}
+		if (ctx.getAttribute("menadzeriDAO") == null) {
+	    	String contextPath = ctx.getRealPath("");
+			ctx.setAttribute("menadzeriDAO", new MenadzeriDAO(contextPath));
 		}
 
 	}
@@ -107,6 +115,14 @@ public class LoginService {
 		else {
 			return Response.status(400).build();
 		}
-		
 	}
+	
+	@GET
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<KorisnikSaUlogom> dobaviSveKorisnike(@Context HttpServletRequest request) {
+		return KorisniciDAO.dobaviSveKorisnike();
+	}
+
 }

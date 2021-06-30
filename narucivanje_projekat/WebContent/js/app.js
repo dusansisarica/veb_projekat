@@ -7,6 +7,8 @@ const ProfilAdmin = {template : '<profil-admin></profil-admin>'}
 const DodajRestoranAdmin = {template : '<dodaj-restoran></dodaj-restoran>'}
 const DodajMenadzeraAdmin = {template : '<dodaj-menadzera></dodaj-menadzera>'}
 const DodajDostavljacaAdmin = {template : '<dodaj-dostavljaca></dodaj-dostavljaca>'}
+const PrikaziKorisnikeAdmin = {template : '<prikazi-korisnike></prikazi-korisnike>'}
+
 
 const router = new VueRouter({
 	mode: 'hash',
@@ -19,7 +21,8 @@ const router = new VueRouter({
 		{ path: '/pocetna/admin/profil', component: ProfilAdmin},
 		{ path: '/pocetna/admin/dodaj-restoran', component: DodajRestoranAdmin},
 		{ path: '/pocetna/admin/dodaj-menadzera', component: DodajMenadzeraAdmin},
-		{ path: '/pocetna/admin/dodaj-dostavljaca', component: DodajDostavljacaAdmin}
+		{ path: '/pocetna/admin/dodaj-dostavljaca', component: DodajDostavljacaAdmin},
+		{ path: '/pocetna/admin/prikazi-korisnike', component: PrikaziKorisnikeAdmin}
 	  ]
 });
 

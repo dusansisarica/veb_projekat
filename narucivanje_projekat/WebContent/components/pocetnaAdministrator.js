@@ -34,6 +34,9 @@ Vue.component("pocetna-admin", {
                 <div>
                 <button class="btn btn-outline-success" v-on:click="dodajDostavljaca" type="submit">Dodaj Dostavljaca</button>
                 </div>
+                <div>
+                <button class="btn btn-outline-success" v-on:click="prikaziKorisnike" type="submit">Prikazi Korisnike</button>
+                </div>
                 </div>
             </div>
                 <a class="navbar-brand" style="color:white" href="http://localhost:8080/narucivanje/#/">Početna</a> 
@@ -60,6 +63,9 @@ Vue.component("pocetna-admin", {
         },
         dodajDostavljaca : function(){
             router.push('/pocetna/admin/dodaj-dostavljaca');
+        },
+        prikaziKorisnike : function(){
+            router.push('/pocetna/admin/prikazi-korisnike');
         }
     }
 });
