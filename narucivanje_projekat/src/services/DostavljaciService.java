@@ -1,12 +1,9 @@
 package services;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -14,22 +11,19 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import beans.Menadzer;
 import dao.AdminDAO;
 import dao.DostavljaciDAO;
 import dao.KorisniciDAO;
 import dao.KupacDAO;
 import dao.MenadzeriDAO;
-import dao.RestoraniDAO;
 import dto.KorisnikUlogaDTO;
-import dto.RestoranLokacijaDTO;
 
-@Path("/menadzeri")
-public class MenadzerService {
+@Path("/dostavljaci")
+public class DostavljaciService {
 	@Context
 	ServletContext ctx;
 
-	public MenadzerService() {
+	public DostavljaciService() {
 		
 	}
 
@@ -58,14 +52,13 @@ public class MenadzerService {
 	    	String contextPath = ctx.getRealPath("");
 			ctx.setAttribute("dostavljaciDAO", new DostavljaciDAO(contextPath));
 		}
-
 	}
 	
 	@POST
 	@Path("/")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response napraviMenadzera(KorisnikUlogaDTO korisnik, @Context HttpServletRequest request) {
+	public Response napraviDostavljaca(KorisnikUlogaDTO korisnik, @Context HttpServletRequest request) {
 		if(KorisniciDAO.upisiKorisnika(korisnik)) {
 			return Response.status(200).build();
 		}
@@ -74,15 +67,4 @@ public class MenadzerService {
 		}
 
 	}
-	
-	@GET
-	@Path("/slobodni-menadzeri")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Menadzer> slobodniMenadzeri(@Context HttpServletRequest request){
-		return MenadzeriDAO.dobaviSlobodneMenadzere();
-	}
-	
-	
-	
 }

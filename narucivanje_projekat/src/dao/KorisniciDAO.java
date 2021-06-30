@@ -88,6 +88,7 @@ public class KorisniciDAO {
 			sviKorisnici.add(k);
 		}
 		sviKorisnici.add(korisnik.getKorisnikRegistracija());
+		korisnici.put(korisnik.getKorisnikRegistracija().getKorisnickoIme(), korisnik.getKorisnikRegistracija());
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
@@ -102,7 +103,9 @@ public class KorisniciDAO {
 		if (korisnik.getKorisnikRegistracija().getUloga().equals("menadzer")) {
 			return MenadzeriDAO.upisiMenadzera(korisnik);
 		}
-
+		if (korisnik.getKorisnikRegistracija().getUloga().equals("dostavljac")) {
+			return DostavljaciDAO.upisiDostavljace(korisnik);
+		}
 		return true;
 	}
 	
@@ -123,7 +126,11 @@ public class KorisniciDAO {
 		case "admin":
 			k = AdminDAO.nadjiAdmina(korisnikReg.getId());
 			break;
-		default:
+		case "menadzer":
+			k = MenadzeriDAO.nadjiMenadzera(korisnikReg.getId());
+			break;
+		case "dostavljac":
+			k = DostavljaciDAO.nadjiDostavljaca(korisnikReg.getId());
 			break;
 		}
 		

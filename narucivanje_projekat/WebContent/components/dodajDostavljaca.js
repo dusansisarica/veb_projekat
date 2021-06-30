@@ -1,8 +1,8 @@
-Vue.component("dodaj-menadzera", {
+Vue.component("dodaj-dostavljaca", {
     data : function(){
         return{
             korisnik: {ime: null, prezime: null, pol: false, datumRodjenja : null},
-            korisnikRegistracija: {korisnickoIme: null, lozinka: null, uloga: "menadzer"},
+            korisnikRegistracija: {korisnickoIme: null, lozinka: null, uloga: "dostavljac"},
             korisnikPomocna: {korisnik: null, korisnikRegistracija: null},
         }
     },
@@ -14,8 +14,8 @@ Vue.component("dodaj-menadzera", {
                 <a class="navbar-brand" style="color:white" href="http://localhost:8080/narucivanje/#/">Početna</a> 
             </div>
         </nav>
+        <p>Napravi dostavljaca:</p>
 
-        <p>Napravi menadzera:</p>
         <form>
             <table>
                 <tr>
@@ -64,7 +64,7 @@ Vue.component("dodaj-menadzera", {
             event.preventDefault();
             this.korisnikPomocna.korisnik = this.korisnik;
             this.korisnikPomocna.korisnikRegistracija = this.korisnikRegistracija;
-            axios.post('/narucivanje/rest/menadzeri', this.korisnikPomocna).
+            axios.post('/narucivanje/rest/dostavljaci', this.korisnikPomocna).
             then(response => router.push(`/pocetna/admin`));
         },
         onChange : function(event){
@@ -77,4 +77,5 @@ Vue.component("dodaj-menadzera", {
             }
         }
     }
+
 });

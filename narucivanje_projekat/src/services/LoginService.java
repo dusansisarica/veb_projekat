@@ -19,6 +19,7 @@ import beans.Korisnik;
 import beans.KorisnikRegistracija;
 import beans.Kupac;
 import dao.AdminDAO;
+import dao.DostavljaciDAO;
 import dao.KorisniciDAO;
 import dao.KupacDAO;
 import dto.KorisnikUlogaDTO;
@@ -50,6 +51,11 @@ public class LoginService {
 	    	String contextPath = ctx.getRealPath("");
 			ctx.setAttribute("adminiDAO", new AdminDAO(contextPath));
 		}
+		if (ctx.getAttribute("dostavljaciDAO") == null) {
+	    	String contextPath = ctx.getRealPath("");
+			ctx.setAttribute("dostavljaciDAO", new DostavljaciDAO(contextPath));
+		}
+
 	}
 	
 	@POST

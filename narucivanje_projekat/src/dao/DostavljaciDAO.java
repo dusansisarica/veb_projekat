@@ -11,28 +11,28 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import beans.KorisnikRegistracija;
+import beans.Dostavljac;
 import beans.Kupac;
 import beans.NormalanKupac;
 import dto.KorisnikUlogaDTO;
 
-public class KupacDAO {
-	private static HashMap<String, Kupac> kupci = new HashMap<String, Kupac>();
-	private static String putanja = System.getProperty("catalina.base") + File.separator + "Datoteke" + File.separator + "kupci.json";
+public class DostavljaciDAO {
+	private static HashMap<String, Dostavljac> dostavljaci = new HashMap<String, Dostavljac>();
+	private static String putanja = System.getProperty("catalina.base") + File.separator + "Datoteke" + File.separator + "dostavljaci.json";
 	
-	public KupacDAO(String contextPath) {
-		ucitajKupce(contextPath);
+	public DostavljaciDAO(String contextPath) {
+		ucitajDostavljace(contextPath);
 	}
 
-	private void ucitajKupce(String contextPath) {
+	private void ucitajDostavljace(String contextPath) {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		File file = new File(putanja);
 
-		ArrayList<Kupac> sviKupci = new ArrayList<Kupac>();
+		ArrayList<Dostavljac> sviDostavljaci = new ArrayList<Dostavljac>();
 		try {
 
-			sviKupci = objectMapper.readValue(file, new TypeReference<ArrayList<Kupac>>() {
+			sviDostavljaci = objectMapper.readValue(file, new TypeReference<ArrayList<Dostavljac>>() {
 			});
 
 		} catch (JsonParseException e) {
@@ -43,15 +43,15 @@ public class KupacDAO {
 			e.printStackTrace();
 		}
 
-		for (Kupac k : sviKupci) {
-			kupci.put(k.getIdKorisnika(), k);
+		for (Dostavljac d : sviDostavljaci) {
+			dostavljaci.put(d.getIdKorisnika(), d);
 		}		
 
 	}
 	
-	public static boolean upisiKupca(KorisnikUlogaDTO korisnik) {
+	public static boolean upisiDostavljace(KorisnikUlogaDTO korisnik) {
 
-		Kupac kupac = new Kupac(korisnik.getKorisnikRegistracija().getId(), korisnik.getKorisnik().getIme(), korisnik.getKorisnik().getPrezime(),
+		Dostavljac dostavljac = new Dostavljac(korisnik.getKorisnikRegistracija().getId(), korisnik.getKorisnik().getIme(), korisnik.getKorisnik().getPrezime(),
 				korisnik.getKorisnik().isPol(), korisnik.getKorisnik().getDatumRodjenja());
 		
 		if(korisnik.getKorisnik().getDatumRodjenja() == null) {
@@ -64,18 +64,16 @@ public class KupacDAO {
 			return false;
 		}
 		
-		kupac.setTipKupca(new NormalanKupac());
-
-		ArrayList<Kupac> sviKupci = new ArrayList<Kupac>();
-		for (Kupac k : kupci.values()) {
-			sviKupci.add(k);
+		ArrayList<Dostavljac> sviDostavljaci = new ArrayList<Dostavljac>();
+		for (Dostavljac d : dostavljaci.values()) {
+			sviDostavljaci.add(d);
 		}
-		sviKupci.add(kupac);
-		kupci.put(kupac.getIdKorisnika(), kupac);
+		sviDostavljaci.add(dostavljac);
+		dostavljaci.put(dostavljac.getIdKorisnika(), dostavljac);
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			objectMapper.writeValue(new FileOutputStream(putanja), sviKupci);
+			objectMapper.writeValue(new FileOutputStream(putanja), sviDostavljaci);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -83,9 +81,8 @@ public class KupacDAO {
 		return true;
 	}
 	
-	public static Kupac nadjiKupca(String id) {
-		return kupci.get(id);
+	public static Dostavljac nadjiDostavljaca(String id) {
+		return dostavljaci.get(id);
 	}
-
 
 }
