@@ -21,14 +21,19 @@ Vue.component("pocetna-strana", {
                 </div>    
             </div>
         </nav>
-        <table>
-            <td v-for="r in restoran">
-                <tr>{{r.naziv}}</tr>
-                <tr>{{r.tipRestorana}}</tr>
-                <tr>{{r.statusRestorana}}</tr>
-                <img width="42" height="42" :src="'slike/' + r.logoRestorana"/>
-            </td>
-        </table>
+        <div class="card-deck" style="display:inline-block;">
+            <div class="card" style="width: 18rem; display:inline-block; margin:0.3%;" v-for="r in restoran">
+                <img :src="'slike/' + r.logoRestorana" class="card-img-top" alt="logo restorana">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">{{r.naziv}}</li>
+                    <li class="list-group-item">{{r.tipRestorana}}</li>
+                    <li class="list-group-item">{{r.statusRestorana}}</li>
+                </ul>
+                <div class="card-body">
+                    <button class="btn btn-outline-success" v-on:click="pogledajRestoran(r.id)" type="submit">Pogledaj ponudu</button>
+                </div>
+            </div>
+        </div>
     </form>
     `,
 
@@ -38,6 +43,9 @@ Vue.component("pocetna-strana", {
         },
         registrujteSe : function(){
             router.push('/registracija');
+        },
+        pogledajRestoran : function(id){
+            router.push(`/restorani/${id}`);
         }
     }
 

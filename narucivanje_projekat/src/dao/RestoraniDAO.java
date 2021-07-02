@@ -100,4 +100,8 @@ public class RestoraniDAO {
 		}
 		return sviRestorani;
 	}
+	
+	public Restoran dobaviRestoran(String id) {
+		return restorani.get(id);
+	}
 }
