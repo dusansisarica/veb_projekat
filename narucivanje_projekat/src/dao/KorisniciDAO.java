@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -30,15 +33,16 @@ public class KorisniciDAO {
 
 	private static HashMap<String, KorisnikRegistracija> korisnici = new HashMap<String, KorisnikRegistracija>();
 	private static String putanja = System.getProperty("catalina.base") + File.separator + "Datoteke" + File.separator + "korisnici.json";
+	//private static String putanja = ".." + File.separator + "Datoteke" + File.separator + "korisnici.json";
+	//private static String putanja = KorisniciDAO.class.getProtectionDomain().getCodeSource().getLocation().toString();
+	//private static String putanja = "Datoteke" + File.separator + "korisnici.json";
 	
 	public KorisniciDAO(){
 		File podaciDir = new File(System.getProperty("catalina.base") + File.separator + "Datoteke");
 		if (!podaciDir.exists()) {
 			podaciDir.mkdir();
 		}
-		//this.users = new LinkedHashMap<String, User>();
-		
-		// UNCOMMENT IF YOU WANT TO ADD MOCKUP DATA TO FILE addMockupData();
+
 	}
 
 	public KorisniciDAO(String contextPath) {
@@ -50,10 +54,10 @@ public class KorisniciDAO {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		File file = new File(putanja);
+		//File file = new File(contextPath + "Datoteke/korisnici.json");
 
 		ArrayList<KorisnikRegistracija> sviKorisnici = new ArrayList<KorisnikRegistracija>();
 		try {
-
 			sviKorisnici = objectMapper.readValue(file, new TypeReference<ArrayList<KorisnikRegistracija>>() {
 			});
 
