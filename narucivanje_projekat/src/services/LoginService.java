@@ -20,6 +20,7 @@ import beans.Korisnik;
 
 import beans.KorisnikRegistracija;
 import beans.Kupac;
+import beans.Menadzer;
 import dao.AdminDAO;
 import dao.DostavljaciDAO;
 import dao.KorisniciDAO;
@@ -83,6 +84,14 @@ public class LoginService {
 			request.getSession().setAttribute("user", ulogovaniKorisnik);
 			return Response.status(200).entity("/pocetna/admin").build();
 		}
+		else if (ulogovaniKorisnik.getClass() == Menadzer.class){
+            request.getSession().setAttribute("user", ulogovaniKorisnik);
+            return Response.status(200).entity("/pocetna/menadzer").build();
+        }
+        else if (ulogovaniKorisnik.getClass() == Kupac.class){
+            request.getSession().setAttribute("user", ulogovaniKorisnik);
+            return Response.status(200).entity("/pocetna/kupac").build();
+        }
 		return Response.status(400).build();
 	}
 	

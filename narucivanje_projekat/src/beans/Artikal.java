@@ -6,10 +6,10 @@ public class Artikal {
 	private String naziv;
 	private double cena;
 	private TipArtikla tipArtikla;
-	private Restoran restoran;
+	private String idRestoran;
 	private double kolicina;
 	private String opis;
-	private BufferedImage slikaArtikla;
+	private String slikaArtikla;
 	public String getNaziv() {
 		return naziv;
 	}
@@ -28,11 +28,11 @@ public class Artikal {
 	public void setTipArtikla(TipArtikla tipArtikla) {
 		this.tipArtikla = tipArtikla;
 	}
-	public Restoran getRestoran() {
-		return restoran;
+	public String getRestoran() {
+		return idRestoran;
 	}
-	public void setRestoran(Restoran restoran) {
-		this.restoran = restoran;
+	public void setRestoran(String idRestoran) {
+		this.idRestoran = idRestoran;
 	}
 	public double getKolicina() {
 		return kolicina;
@@ -46,19 +46,19 @@ public class Artikal {
 	public void setOpis(String opis) {
 		this.opis = opis;
 	}
-	public BufferedImage getSlikaArtikla() {
+	public String getSlikaArtikla() {
 		return slikaArtikla;
 	}
-	public void setSlikaArtikla(BufferedImage slikaArtikla) {
+	public void setSlikaArtikla(String slikaArtikla) {
 		this.slikaArtikla = slikaArtikla;
 	}
-	public Artikal(String naziv, double cena, TipArtikla tipArtikla, Restoran restoran, double kolicina, String opis,
-			BufferedImage slikaArtikla) {
+	public Artikal(String naziv, double cena, TipArtikla tipArtikla, String idRestoran, double kolicina, String opis,
+			String slikaArtikla) {
 		super();
 		this.naziv = naziv;
 		this.cena = cena;
 		this.tipArtikla = tipArtikla;
-		this.restoran = restoran;
+		this.idRestoran = idRestoran;
 		this.kolicina = kolicina;
 		this.opis = opis;
 		this.slikaArtikla = slikaArtikla;
