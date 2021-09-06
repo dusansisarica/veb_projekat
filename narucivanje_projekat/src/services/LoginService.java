@@ -89,10 +89,6 @@ public class LoginService {
 			request.getSession().setAttribute("user", ulogovaniKorisnik);
 			return Response.status(200).entity("/pocetna/menadzer").build();
 		}
-		else if (ulogovaniKorisnik.getClass() == Kupac.class){
-			request.getSession().setAttribute("user", ulogovaniKorisnik);
-			return Response.status(200).entity("/pocetna/kupac").build();
-		}
 		return Response.status(400).build();
 	}
 	

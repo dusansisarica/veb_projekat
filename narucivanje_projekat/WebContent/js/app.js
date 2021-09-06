@@ -9,6 +9,10 @@ const DodajMenadzeraAdmin = {template : '<dodaj-menadzera></dodaj-menadzera>'}
 const DodajDostavljacaAdmin = {template : '<dodaj-dostavljaca></dodaj-dostavljaca>'}
 const PrikaziKorisnikeAdmin = {template : '<prikazi-korisnike></prikazi-korisnike>'}
 const PrikazJednogRestorana = {template : '<prikazi-restoran></prikazi-restoran>'}
+const PocetnaMenadzer = {template : '<pocetna-menadzer></pocetna-menadzer>'}
+const DodajArtikal = {template : '<dodaj-artikal></dodaj-artikal>'}
+
+
 
 
 
@@ -25,7 +29,9 @@ const router = new VueRouter({
 		{ path: '/pocetna/admin/dodaj-menadzera', component: DodajMenadzeraAdmin},
 		{ path: '/pocetna/admin/dodaj-dostavljaca', component: DodajDostavljacaAdmin},
 		{ path: '/pocetna/admin/prikazi-korisnike', component: PrikaziKorisnikeAdmin},
-		{ path: '/restorani/:id', component: PrikazJednogRestorana}
+		{ path: '/restorani/:id', component: PrikazJednogRestorana},
+		{ path: '/pocetna/menadzer', component: PocetnaMenadzer},
+	    { path: '/pocetna/menadzer/dodaj-artikal/:id', component: DodajArtikal}
 	  ]
 });
 
