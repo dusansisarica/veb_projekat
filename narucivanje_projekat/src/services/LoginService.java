@@ -8,6 +8,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -20,6 +21,7 @@ import beans.Korisnik;
 
 import beans.KorisnikRegistracija;
 import beans.Kupac;
+import beans.Menadzer;
 import dao.AdminDAO;
 import dao.DostavljaciDAO;
 import dao.KorisniciDAO;
@@ -83,6 +85,14 @@ public class LoginService {
 			request.getSession().setAttribute("user", ulogovaniKorisnik);
 			return Response.status(200).entity("/pocetna/admin").build();
 		}
+		else if (ulogovaniKorisnik.getClass() == Menadzer.class){
+			request.getSession().setAttribute("user", ulogovaniKorisnik);
+			return Response.status(200).entity("/pocetna/menadzer").build();
+		}
+		else if (ulogovaniKorisnik.getClass() == Kupac.class){
+			request.getSession().setAttribute("user", ulogovaniKorisnik);
+			return Response.status(200).entity("/pocetna/kupac").build();
+		}
 		return Response.status(400).build();
 	}
 	
@@ -123,6 +133,17 @@ public class LoginService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<KorisnikSaUlogom> dobaviSveKorisnike(@Context HttpServletRequest request) {
 		return KorisniciDAO.dobaviSveKorisnike();
+	}
+
+	@GET
+	@Path("/pretraga")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<KorisnikSaUlogom> pretraziKorisnika(@QueryParam("ime") String ime){
+//		if (ime == null || ime == "null" || ime.isEmpty()) {
+//			return KorisniciDAO.dobaviSveKorisnike();
+//		}
+		return KorisniciDAO.pronadjiKorisnikePoImenu(ime);
 	}
 
 }

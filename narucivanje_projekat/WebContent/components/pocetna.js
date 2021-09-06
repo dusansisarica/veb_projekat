@@ -1,13 +1,83 @@
 Vue.component("pocetna-strana", {
     data: function(){
         return {
-            restoran: {naziv : null, tipRestorana : null, statusRestorana : null, logoRestorana : null}
+            restoran: {naziv : null, tipRestorana : null, statusRestorana : null, logoRestorana : null},
+            parametarPretrageNaziv : "",
+            pretrazeniRestorani : null,
+            parametarPretrageGrad : "",
+            opcijaSortiranja : "",
+            filterTipRestorana : "",
+            filtriraniRestorani : null
         }
     },
 
     mounted : function(){
         axios.get('/narucivanje/rest/restorani').
         then(response => this.restoran = response.data);
+    },
+
+    computed : {
+        filteredResource(){
+            if (this.parametarPretrageNaziv){
+                this.pretrazeniRestorani = this.restoran.filter(restoran =>
+                    restoran.naziv.toLowerCase().includes(this.parametarPretrageNaziv));
+            }
+            if (this.parametarPretrageGrad){
+                if (this.parametarPretrageNaziv){
+                    this.pretrazeniRestorani = this.pretrazeniRestorani.filter(restoran =>
+                        restoran.lokacijaRestorana.adresa.split(",")[1].toLowerCase().includes(this.parametarPretrageGrad.toLowerCase()));
+                }
+                else
+                {
+                    this.pretrazeniRestorani = this.restoran.filter(restoran =>
+                        restoran.lokacijaRestorana.adresa.split(",")[1].toLowerCase().includes(this.parametarPretrageGrad.toLowerCase()));
+
+                }
+            }
+            if (this.parametarPretrageNaziv || this.parametarPretrageGrad){
+                switch(this.opcijaSortiranja){
+                    case "imeRastuce":
+                        this.pretrazeniRestorani.sort((a, b) => a.naziv.toLowerCase() > b.naziv.toLowerCase() ? 1 : -1);
+                        break;
+                    case "imeOpadajuce":
+                        this.pretrazeniRestorani.sort((a, b) => a.naziv.toLowerCase() < b.naziv.toLowerCase() ? 1 : -1);
+                        break;
+                    case "przRastuce":
+                        this.pretrazeniRestorani.sort((a, b) => a.lokacijaRestorana.adresa.split(",")[1].toLowerCase() > b.lokacijaRestorana.adresa.split(",")[1].toLowerCase() ? 1 : -1);
+                        break;
+                    case "przOpadajuce":
+                        this.pretrazeniRestorani.sort((a, b) => a.lokacijaRestorana.adresa.split(",")[1].toLowerCase() < b.lokacijaRestorana.adresa.split(",")[1].toLowerCase() ? 1 : -1);
+                        break;
+                }
+                if (this.filterTipRestorana){
+                    return this.filtriraniRestorani = this.pretrazeniRestorani.filter(restoran =>
+                        restoran.tipRestorana.toLowerCase().includes(this.filterTipRestorana));
+                }
+            }
+
+            if (!this.parametarPretrageNaziv && !this.parametarPretrageGrad) {
+                switch(this.opcijaSortiranja){
+                    case "imeRastuce":
+                        this.restoran.sort((a, b) => a.naziv.toLowerCase() > b.naziv.toLowerCase() ? 1 : -1);
+                        break;
+                    case "imeOpadajuce":
+                        this.restoran.sort((a, b) => a.naziv.toLowerCase() < b.naziv.toLowerCase() ? 1 : -1);
+                        break;
+                    case "przRastuce":
+                        this.restoran.sort((a, b) => a.lokacijaRestorana.adresa.split(",")[1].toLowerCase() > b.lokacijaRestorana.adresa.split(",")[1].toLowerCase() ? 1 : -1);
+                        break;
+                    case "przOpadajuce":
+                        this.restoran.sort((a, b) => a.lokacijaRestorana.adresa.split(",")[1].toLowerCase() < b.lokacijaRestorana.adresa.split(",")[1].toLowerCase() ? 1 : -1);
+                        break;
+                }
+                if (this.filterTipRestorana){
+                    return this.filtriraniRestorani = this.restoran.filter(restoran =>
+                        restoran.tipRestorana.toLowerCase().includes(this.filterTipRestorana));
+                }
+                return this.restoran;
+            }
+            return this.pretrazeniRestorani;
+        }
     },
 
     template: `
@@ -21,13 +91,33 @@ Vue.component("pocetna-strana", {
                 </div>    
             </div>
         </nav>
+        <div style="margin:0.3%;">
+        <input type="text"  id="naziv" name="naziv" placeholder="naziv restorana">
+        <input type="text"  id="mesto" name="mesto" placeholder="grad">
+        <select name="sort" id="sort">
+            <option value="" disabled selected>Sortiraj po:</option>
+            <option value="imeRastuce">Naziv restorana-rastuće</option>
+            <option value="imeOpadajuce">Naziv restorana-opadajuće</option>
+            <option value="przRastuce">Lokacija-rastuće</option>
+            <option value="przOpadajuce">Lokacija-opadajuće</option>
+        </select>
+        <select name="filter1" id="filter1">
+            <option value="" disabled selected>Prikazi samo:</option>
+            <option value="italijanski">Italijanske restorane</option>
+            <option value="kineski">Kineske restorane</option>
+            <option value="rostilj">Roštilj restorane</option>
+        </select>
+
+        <button class="btn btn-outline-success" v-on:click="pretrazi" type="button" @submit.prevent="add()">Pretrazi</button>
+        </div>
         <div class="card-deck" style="display:inline-block;">
-            <div class="card" style="width: 18rem; display:inline-block; margin:0.3%;" v-for="r in restoran">
+            <div class="card" style="width: 18rem; display:inline-block; margin:0.3%;" v-for="r in filteredResource">
                 <img :src="'slike/' + r.logoRestorana" class="card-img-top" alt="logo restorana">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">{{r.naziv}}</li>
                     <li class="list-group-item">{{r.tipRestorana}}</li>
                     <li class="list-group-item">{{r.statusRestorana}}</li>
+                    <li class="list-group-item">{{r.lokacijaRestorana.adresa}}</li>
                 </ul>
                 <div class="card-body">
                     <button class="btn btn-outline-success" v-on:click="pogledajRestoran(r.id)" type="submit">Pogledaj ponudu</button>
@@ -46,6 +136,13 @@ Vue.component("pocetna-strana", {
         },
         pogledajRestoran : function(id){
             router.push(`/restorani/${id}`);
+        },
+        pretrazi : function(){
+            this.parametarPretrageNaziv = document.getElementById("naziv").value;
+            this.parametarPretrageGrad = document.getElementById("mesto").value;
+            this.opcijaSortiranja = document.getElementById("sort").value;
+            this.filterTipRestorana = document.getElementById("filter1").value;
+
         }
     }
 

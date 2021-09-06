@@ -161,6 +161,16 @@ public class KorisniciDAO {
 		return sviKorisnici;
 	}
 
+	public static List<KorisnikSaUlogom> pronadjiKorisnikePoImenu(String ime){
+		List<KorisnikSaUlogom> sviKorisnici = dobaviSveKorisnike();
+		List<KorisnikSaUlogom> pronadjeniKorisnici = new ArrayList<KorisnikSaUlogom>();
+		for(KorisnikSaUlogom ksu : sviKorisnici){
+			if (ksu.getKorisnik().getIme().contains(ime)) {
+				pronadjeniKorisnici.add(ksu);
+			}
+		}
+		return pronadjeniKorisnici;
+	}
 
 	
 }

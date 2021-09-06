@@ -11,6 +11,7 @@ const PrikaziKorisnikeAdmin = {template : '<prikazi-korisnike></prikazi-korisnik
 const PrikazJednogRestorana = {template : '<prikazi-restoran></prikazi-restoran>'}
 
 
+
 const router = new VueRouter({
 	mode: 'hash',
 	  routes: [
