@@ -77,16 +77,19 @@ public class LoginService {
 		if (ulogovaniKorisnik == null) {
 			return Response.status(400).build();
 		}
-		else if (ulogovaniKorisnik.getClass() == Kupac.class){
-			request.getSession().setAttribute("user", ulogovaniKorisnik);
-			return Response.status(200).entity("/pocetna").build();
+		KorisnikSaUlogom korisnikUlogovani = new KorisnikSaUlogom(ulogovaniKorisnik, 
+				KorisniciDAO.pronadjiKorisnikuUlogu(ulogovaniKorisnik.getIdKorisnika()));
+		
+		if (ulogovaniKorisnik.getClass() == Kupac.class){
+			request.getSession().setAttribute("user", korisnikUlogovani);
+			return Response.status(200).entity("/").build();
 		}
 		else if (ulogovaniKorisnik.getClass() == Admin.class){
-			request.getSession().setAttribute("user", ulogovaniKorisnik);
+			request.getSession().setAttribute("user", korisnikUlogovani);
 			return Response.status(200).entity("/pocetna/admin").build();
 		}
 		else if (ulogovaniKorisnik.getClass() == Menadzer.class){
-			request.getSession().setAttribute("user", ulogovaniKorisnik);
+			request.getSession().setAttribute("user", korisnikUlogovani);
 			return Response.status(200).entity("/pocetna/menadzer").build();
 		}
 		return Response.status(400).build();
@@ -106,8 +109,8 @@ public class LoginService {
 	@Path("/currentUser")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Korisnik login(@Context HttpServletRequest request) {
-		return (Korisnik) request.getSession().getAttribute("user");
+	public KorisnikSaUlogom login(@Context HttpServletRequest request) {
+		return (KorisnikSaUlogom) request.getSession().getAttribute("user");
 	}
 	
 	@POST

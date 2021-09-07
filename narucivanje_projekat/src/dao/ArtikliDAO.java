@@ -69,6 +69,8 @@ public class ArtikliDAO {
 			return false;
 		}
 		
+		RestoraniDAO.dodajArtikalRestoranu(artikal.getRestoran(), artikal);
+		
 		ArrayList<Artikal> sviArtikli = new ArrayList<Artikal>();
 		for (Artikal a : artikli.values()) {
 			sviArtikli.add(a);

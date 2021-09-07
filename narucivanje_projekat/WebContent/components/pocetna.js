@@ -7,13 +7,16 @@ Vue.component("pocetna-strana", {
             parametarPretrageGrad : "",
             opcijaSortiranja : "",
             filterTipRestorana : "",
-            filtriraniRestorani : null
+            filtriraniRestorani : null,
+            korisnik : {korisnik : null, uloga : null}
         }
     },
 
     mounted : function(){
         axios.get('/narucivanje/rest/restorani').
         then(response => this.restoran = response.data);
+        axios.get('/narucivanje/rest/currentUser').
+        then(response => this.korisnik = response.data);
     },
 
     computed : {
@@ -83,12 +86,17 @@ Vue.component("pocetna-strana", {
     template: `
     <form>
         <nav class="navbar navbar-light bg-dark">
-            <div class="container-fluid">
+            <div v-if="!(korisnik.uloga == 'kupac')" class="container-fluid">
                 <a class="navbar-brand" style="color:white" href="http://localhost:8080/narucivanje/#/">Početna</a>
                 <div class="ml-auto">
                 <button class="btn btn-outline-success" v-on:click="prijaviteSe" type="submit">Prijavite se!</button>
                 <button class="btn btn-outline-success" v-on:click="registrujteSe" type="submit">Registruj se!</button>
                 </div>    
+            </div>
+            <div v-else class="ml-auto ">
+            <a class="navbar-brand" style="color:white" href="http://localhost:8080/narucivanje/#/">Početna</a> 
+                <label class="offset-md-0.2" style="color:white">Dobrodosli, {{korisnik.korisnik.ime}}</label>
+                <button class="btn btn-outline-success" type="submit" v-on:click="odjava">Odjavite se</button>
             </div>
         </nav>
         <div style="margin:0.3%;">
@@ -142,7 +150,10 @@ Vue.component("pocetna-strana", {
             this.parametarPretrageGrad = document.getElementById("mesto").value;
             this.opcijaSortiranja = document.getElementById("sort").value;
             this.filterTipRestorana = document.getElementById("filter1").value;
-
+        },
+        odjava : function(){
+            axios.post(`rest/logout`).
+            then(this.$forceUpdate());
         }
     }
 

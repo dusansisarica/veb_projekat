@@ -17,6 +17,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import beans.Artikal;
 import beans.Korisnik;
 import beans.Lokacija;
 import beans.Restoran;
@@ -101,7 +102,16 @@ public class RestoraniDAO {
 		return sviRestorani;
 	}
 	
-	public Restoran dobaviRestoran(String id) {
+	public static Restoran dobaviRestoran(String id) {
 		return restorani.get(id);
+	}
+	
+	public static void dodajArtikalRestoranu(String id, Artikal artikal) {
+		Restoran restoran = restorani.get(id);
+		List<Artikal> artikli = restoran.getArtikli();
+		artikli.add(artikal);
+		restoran.setArtikli(artikli);
+		restorani.replace(id, restoran);
+		upisiRestorane(restorani);
 	}
 }

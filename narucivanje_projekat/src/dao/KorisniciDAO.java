@@ -171,6 +171,16 @@ public class KorisniciDAO {
 		}
 		return pronadjeniKorisnici;
 	}
+	
+	public static String pronadjiKorisnikuUlogu(String id) {
+		List<KorisnikSaUlogom> sviKorisnici = dobaviSveKorisnike();
+		for (KorisnikSaUlogom ksu : sviKorisnici) {
+			if (ksu.getKorisnik().getIdKorisnika() == id) {
+				return ksu.getUloga();
+			}
+		}
+		return null;
+	}
 
 	
 }

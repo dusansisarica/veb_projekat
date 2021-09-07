@@ -2,7 +2,10 @@ Vue.component("prikazi-restoran", {
     data : function(){
         return {
             restoran : {naziv : null, tipRestorana: null, status: null, logoRestorana: null, artikli: []},
-            id : null
+            id : null,
+            korisnik : {korisnik : null, uloga : null},
+            tip : null,
+            uloga : null
         }
     },
 
@@ -11,6 +14,9 @@ Vue.component("prikazi-restoran", {
         console.log(this.id);
         axios.get('/narucivanje/rest/restorani/nadjiRestoran/' + this.id).
         then(response => this.restoran = response.data);
+        axios.get(`rest/currentUser`).
+            then(response => (this.korisnik = response.data)). //router.push('/prijava')).
+            catch(response => (this.korisnik = response.data));
     },
 
     template : `
@@ -26,12 +32,34 @@ Vue.component("prikazi-restoran", {
             </nav>
 
             <img :src="'slike/' + restoran.logoRestorana"> 
-            {{restoran.naziv}}A
-            <p>{{restoran.tipRestorana}}B</p>
+            <p>{{restoran.naziv}}<p>
+            <p>{{restoran.tipRestorana}}</p>
             <p v-if="restoran.status == true">Otvoren</p>
             <p v-else>Zatvoren</p>
             <p>Dodati lokaciju, ocenu, komentare</p>
-            <p>Artikli:</p>
+            <p>U ponudi:</p>
+            <div class="card-deck" style="display:inline-block;">
+            <div class="card" v-for="artikal in this.restoran.artikli" style="width: 18rem; display:inline-block; margin:0.3%;">
+            <img :src="'slike/' + artikal.slikaArtikla" class="card-img-top" alt="slika artikla">
+                <ul class="list-group list-group-flush" >
+                    <li class="list-group-item">{{artikal.naziv}}</li>
+                    <li class="list-group-item">{{artikal.tipArtikla}}</li>
+                    <li class="list-group-item">Količina: {{artikal.kolicina}}
+                    <span v-if="artikal.tipArtikla == 'pice'">
+                         ml
+                    </span>
+                    <span v-else>
+                         g
+                    </span>
+                    </li>
+                    <li class="list-group-item">{{artikal.opis}}</li>
+                    <li class="list-group-item" >Cena: {{artikal.cena}}</li>
+                    <li v-if="korisnik.uloga == 'kupac'" class="list-group-item">
+                        <button class="btn btn-outline-success"  type="submit">Naruči ovo</button>
+                    </li>
+                </ul>
+            </div>
+            </div>
         </form>
 
     `

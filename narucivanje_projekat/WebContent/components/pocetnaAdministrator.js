@@ -1,7 +1,7 @@
 Vue.component("pocetna-admin", {
     data: function () {
         return {
-          korisnik : {ime : null},
+          korisnik : {korisnik : null, uloga : null},
           korisnikIme: ""
         }
     },
@@ -41,8 +41,8 @@ Vue.component("pocetna-admin", {
             </div>
                 <a class="navbar-brand" style="color:white" href="http://localhost:8080/narucivanje/#/">Početna</a> 
                 <div class="ml-auto ">
-                    <label class="offset-md-0.2" style="color:white">Dobrodosli, {{korisnik.ime}}</label>
-                    <button class="btn btn-outline-success" type="submit">Odjavite se</button>
+                    <label class="offset-md-0.2" style="color:white">Dobrodosli, {{korisnik.korisnik.ime}}</label>
+                    <button class="btn btn-outline-success" type="submit" v-on:click="odjava" >Odjavite se</button>
                 </div>
             </div>
         </nav>
@@ -66,6 +66,10 @@ Vue.component("pocetna-admin", {
         },
         prikaziKorisnike : function(){
             router.push('/pocetna/admin/prikazi-korisnike');
+        },
+        odjava : function(){
+            axios.post(`rest/logout`).
+            then(router.push('/'));
         }
     }
 });

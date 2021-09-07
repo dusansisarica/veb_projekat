@@ -1,7 +1,7 @@
 Vue.component("pocetna-menadzer", {
     data: function () {
         return {
-          korisnik : {ime : null, idKorisnika : null},
+          korisnik : {korisnik : null, uloga : null},
           menadzer : {restoranId : null},
           restoran : {id : null, naziv : null, tipRestorana : null, logoRestorana : null}
         }
@@ -17,7 +17,7 @@ Vue.component("pocetna-menadzer", {
 		      this.korisnik = response.data;		
 		      axios
 		        .get(
-		         `/narucivanje/rest/menadzeri/pronadjiMenadzera/${this.korisnik.idKorisnika}`
+		         `/narucivanje/rest/menadzeri/pronadjiMenadzera/${this.korisnik.korisnik.idKorisnika}`
 		        )
 		        .then(response => {
 		          this.menadzer = response.data;
@@ -48,7 +48,7 @@ Vue.component("pocetna-menadzer", {
           
                 <a class="navbar-brand" style="color:white" href="http://localhost:8080/narucivanje/#/">Početna</a> 
                 <div class="ml-auto ">
-                    <label class="offset-md-0.2" style="color:white">Dobrodosli, {{korisnik.ime}}</label>
+                    <label class="offset-md-0.2" style="color:white">Dobrodosli, {{korisnik.korisnik.ime}}</label>
                     <button class="btn btn-outline-success" type="submit">Odjavite se</button>
                 </div>
             </div>

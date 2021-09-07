@@ -19,6 +19,7 @@ import beans.Korisnik;
 import beans.Lokacija;
 import beans.Restoran;
 import beans.TipRestorana;
+import dao.ArtikliDAO;
 import dao.KorisniciDAO;
 import dao.RestoraniDAO;
 import dto.RestoranLokacijaDTO;
@@ -37,10 +38,15 @@ public class RestoraniService {
 	public void init() {
 		// Ovaj objekat se instancira vi�e puta u toku rada aplikacije
 		// Inicijalizacija treba da se obavi samo jednom
+		if (ctx.getAttribute("artikliDAO") == null) {
+	    	String contextPath = ctx.getRealPath("");
+			ctx.setAttribute("artikliDAO", new ArtikliDAO(contextPath));
+		}
 		if (ctx.getAttribute("restoraniDAO") == null) {
 	    	String contextPath = ctx.getRealPath("");
 			ctx.setAttribute("restoraniDAO", new RestoraniDAO(contextPath));
 		}
+		
 	}
 	 
 
