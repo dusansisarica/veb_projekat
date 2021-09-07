@@ -46,7 +46,7 @@ public class ArtikliDAO {
 		}
 
 		for (Artikal a : sviArtikli) {
-			artikli.put(a.getNaziv(), a);
+			artikli.put(a.getIdArtikla(), a);
 		}		
 
 	}
@@ -55,7 +55,9 @@ public class ArtikliDAO {
 
 		Artikal artikalUpis = new Artikal(artikal.getNaziv(), artikal.getCena(), artikal.getTipArtikla(),
 				artikal.getRestoran(), artikal.getKolicina(), artikal.getOpis(), artikal.getSlikaArtikla());
-		
+		if(artikli.containsKey(artikal.getNaziv())) {
+			return false;
+		}
 		if(artikal.getNaziv() == null || artikal.getNaziv() == "") {
 			return false;
 		}
@@ -69,6 +71,7 @@ public class ArtikliDAO {
 			return false;
 		}
 		
+		artikal.setIdArtikla(Integer.toString(artikli.size()));
 		RestoraniDAO.dodajArtikalRestoranu(artikal.getRestoran(), artikal);
 		
 		ArrayList<Artikal> sviArtikli = new ArrayList<Artikal>();
@@ -76,7 +79,7 @@ public class ArtikliDAO {
 			sviArtikli.add(a);
 		}
 		sviArtikli.add(artikal);
-		artikli.put(artikal.getNaziv(), artikal);
+		artikli.put(artikal.getIdArtikla(), artikal);
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
@@ -86,6 +89,10 @@ public class ArtikliDAO {
 			e.printStackTrace();
 		}
 		return true;
+	}
+	
+	public static Artikal dobaviArtikalPrekoId(String idArtikla) {
+		return artikli.get(idArtikla);
 	}
 	
 }

@@ -94,7 +94,8 @@ Vue.component("pocetna-strana", {
                 </div>    
             </div>
             <div v-else class="ml-auto ">
-            <a class="navbar-brand" style="color:white" href="http://localhost:8080/narucivanje/#/">Početna</a> 
+            <a class="navbar-brand" style="color:white" href="http://localhost:8080/narucivanje/#/">Početna</a>
+                <button class="btn btn-outline-success" v-on:click="korpa" type="submit">Korpa</button> 
                 <label class="offset-md-0.2" style="color:white">Dobrodosli, {{korisnik.korisnik.ime}}</label>
                 <button class="btn btn-outline-success" type="submit" v-on:click="odjava">Odjavite se</button>
             </div>
@@ -154,6 +155,9 @@ Vue.component("pocetna-strana", {
         odjava : function(){
             axios.post(`rest/logout`).
             then(this.$forceUpdate());
+        },
+        korpa: function(){
+        	 router.push(`/korpa/${korisnik.korisnik.idKorisnika}`);
         }
     }
 

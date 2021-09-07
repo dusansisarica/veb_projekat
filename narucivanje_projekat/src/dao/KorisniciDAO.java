@@ -181,6 +181,26 @@ public class KorisniciDAO {
 		}
 		return null;
 	}
+	
+	public static List<Kupac> dobaviSveKupce(){
+		List<Kupac> kupci = new ArrayList<Kupac>();
+		for (KorisnikSaUlogom krg : dobaviSveKorisnike()) {
+			if (krg.getUloga() == "kupac") {
+				kupci.add((Kupac)krg.getKorisnik());
+			}
+		}
+		return kupci;
+	}
+	
+	public static Kupac pronadjiKupcaPoId(String idKupca) {
+		List<Kupac> kupci = dobaviSveKupce();
+		for(Kupac kupac : kupci) {
+			if (kupac.getIdKorisnika().equals(idKupca)) {
+				return kupac;
+			}
+		}
+		return null;
+	}
 
 	
 }

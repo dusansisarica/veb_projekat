@@ -5,7 +5,8 @@ Vue.component("prikazi-restoran", {
             id : null,
             korisnik : {korisnik : null, uloga : null},
             tip : null,
-            uloga : null
+            uloga : null,
+            narudzbina : {korisnikId : null, artikalId : null, kolicina : null}
         }
     },
 
@@ -17,6 +18,7 @@ Vue.component("prikazi-restoran", {
         axios.get(`rest/currentUser`).
             then(response => (this.korisnik = response.data)). //router.push('/prijava')).
             catch(response => (this.korisnik = response.data));
+        this.narudzbina.korisnikId = this.korisnik.korisnik.idKorisnika;
     },
 
     template : `
@@ -55,13 +57,25 @@ Vue.component("prikazi-restoran", {
                     <li class="list-group-item">{{artikal.opis}}</li>
                     <li class="list-group-item" >Cena: {{artikal.cena}}</li>
                     <li v-if="korisnik.uloga == 'kupac'" class="list-group-item">
-                        <button class="btn btn-outline-success"  type="submit">Naruči ovo</button>
+                      
+                  			  <td>Kolicina:</td>
+                   		      <td><input type = "text" v-model="narudzbina.kolicina"  name="kolicina"></td>
+               			 
+                        <button class="btn btn-outline-success" v-on:click="naruciArtikal(artikal.idArtikla)"  type="submit">Naruči ovo</button>
                     </li>
                 </ul>
             </div>
             </div>
         </form>
 
-    `
+    `,
+     methods : {
+        naruciArtikal : function(idArtikla){
+            event.preventDefault();
+            this.narudzbina.artikalId = idArtikla;
+            this.narudzbina.korisnikId = this.korisnik.korisnik.idKorisnika;
+            axios.post('/narucivanje/rest/porudzbine/dodajArtikalUPorudzbinu', this.narudzbina);
+        }
+    }
 
 });

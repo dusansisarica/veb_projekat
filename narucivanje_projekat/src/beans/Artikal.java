@@ -3,6 +3,7 @@ package beans;
 import java.awt.image.BufferedImage;
 
 public class Artikal {
+	private String idArtikla;
 	private String naziv;
 	private double cena;
 	private TipArtikla tipArtikla;
@@ -66,6 +67,12 @@ public class Artikal {
 	public Artikal() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+	public String getIdArtikla() {
+		return idArtikla;
+	}
+	public void setIdArtikla(String idArtikla) {
+		this.idArtikla = idArtikla;
 	}
 	
 }

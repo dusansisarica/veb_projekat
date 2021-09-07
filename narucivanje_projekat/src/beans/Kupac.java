@@ -13,14 +13,14 @@ public class Kupac extends Korisnik {
 
 	private Object tipKupca;
 	private List<Porudzbina> svePorudzbine = new ArrayList<Porudzbina>();
-	private Korpa korpa;
+	private Porudzbina korpa;
 	private int brojSakupljenihBodova;
 
-	public Korpa getKorpa() {
+	public Porudzbina getKorpa() {
 		return korpa;
 	}
 
-	public void setKorpa(Korpa korpa) {
+	public void setKorpa(Porudzbina korpa) {
 		this.korpa = korpa;
 	}
 
