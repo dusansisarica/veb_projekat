@@ -1,21 +1,39 @@
 Vue.component("korpa", {
     data: function(){
-        return{
-           
+        return {
+           korisnik : {korisnik : null, uloga : null},
+           artikli : {artikal : null, kolicina : null},
+           cena : null
         }
     },
 
     mounted: function(){
+        axios.get(`rest/currentUser`).
+        then(response =>{ this.korisnik = response.data;
+            axios.get(`rest/porudzbine/dobaviKorisnikovuKorpu/${this.korisnik.korisnik.idKorisnika}`).
+        then(response => this.artikli = response.data);
+            axios.get(`rest/porudzbine/dobaviUkupnuCenuKorpe/${this.korisnik.korisnik.idKorisnika}`).
+        then(response => this.cena = response.data)});
         
     },
 
     template: `
     <form>
-        <nav class="navbar navbar-light bg-dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" style="color:white" href="http://localhost:8080/narucivanje/#/">Početna</a> 
+        <div v-if="Object.entries(artikli).length">
+            <div class="card-deck" style="display:inline-block;">
+            <div class="card" v-for="value in this.artikli"  style="width: 18rem; display:inline-block; margin:0.3%;">
+                <ul class="list-group list-group-flush" >
+                    <li class="list-group-item">Naziv: {{value.artikal.naziv}}</li>
+                    <li class="list-group-item">Cena: {{value.artikal.cena}}</li>
+                    <li class="list-group-item">Količina: {{value.kolicina}}</li>
+                </ul>
             </div>
-        </nav>
-       
+            </div>
+            <p>Cena porudžbine je {{cena}}</p>
+        </div>
+        <div v-else>
+            korpa je prazna
+        </div>
+    </form>
     `
 });

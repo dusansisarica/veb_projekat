@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Porudzbina implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String idPorudzbine;
 	private HashMap<String, Integer> artikli = new HashMap<String, Integer>();
 	private String idRestoran;

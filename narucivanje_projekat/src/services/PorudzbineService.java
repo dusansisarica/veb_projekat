@@ -1,5 +1,7 @@
 package services;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +21,7 @@ import beans.Restoran;
 import dao.ArtikliDAO;
 import dao.PorudzbineDAO;
 import dao.RestoraniDAO;
+import dto.ArtikalKolicinaDTO;
 import dto.PorudzbineDTO;
 
 @Path("/porudzbine")
@@ -87,5 +90,18 @@ public class PorudzbineService {
 		PorudzbineDAO.dodajArtikalUPorudzbinu(porudzbineDto);
 	}
 	
+	@GET
+	@Path("/dobaviKorisnikovuKorpu/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<ArtikalKolicinaDTO> dobaviSadrzajKorpe(@PathParam("id") String id) {
+		return PorudzbineDAO.dobaviSadrzajKorpe(id);
+	}
+	
+	@GET
+	@Path("/dobaviUkupnuCenuKorpe/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public double dobaviCenu(@PathParam("id") String id) {
+		return PorudzbineDAO.dobaviCenu(id);
+	}
 	
 }

@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import beans.Artikal;
 import beans.Kupac;
 import beans.Porudzbina;
+import dto.ArtikalKolicinaDTO;
 import dto.PorudzbineDTO;
 
 public class PorudzbineDAO {
@@ -114,5 +115,25 @@ public class PorudzbineDAO {
 		Artikal artikal = ArtikliDAO.dobaviArtikalPrekoId(porudzbineDto.getArtikalId());
 		porudzbina.setCena(porudzbina.getCena() + porudzbineDto.getKolicina()*artikal.getCena());
 		kupac.setKorpa(porudzbina);
+	}
+	
+	public static List<ArtikalKolicinaDTO> dobaviSadrzajKorpe(String id) {
+		Kupac kupac = KorisniciDAO.pronadjiKupcaPoId(id);
+		List<ArtikalKolicinaDTO> artikliUKorpi = new ArrayList<ArtikalKolicinaDTO>();
+		if (kupac.getKorpa() == null) {
+			kupac.setKorpa(new Porudzbina());
+		}
+		if (kupac.getKorpa().getArtikli().size() != 0) {
+			for (String art : kupac.getKorpa().getArtikli().keySet()) {
+				artikliUKorpi.add(new ArtikalKolicinaDTO(ArtikliDAO.dobaviArtikalPrekoId(art), kupac.getKorpa().getArtikli().get(art)));
+			}
+		}
+		
+		return artikliUKorpi;
+	}
+
+	public static double dobaviCenu(String id) {
+		// TODO Auto-generated method stub
+		return KorisniciDAO.pronadjiKupcaPoId(id).getKorpa().getCena();
 	}
 }

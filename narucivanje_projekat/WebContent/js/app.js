@@ -11,6 +11,7 @@ const PrikaziKorisnikeAdmin = {template : '<prikazi-korisnike></prikazi-korisnik
 const PrikazJednogRestorana = {template : '<prikazi-restoran></prikazi-restoran>'}
 const PocetnaMenadzer = {template : '<pocetna-menadzer></pocetna-menadzer>'}
 const DodajArtikal = {template : '<dodaj-artikal></dodaj-artikal>'}
+const Korpa = {template : '<korpa></korpa>'}
 
 
 
@@ -31,7 +32,9 @@ const router = new VueRouter({
 		{ path: '/pocetna/admin/prikazi-korisnike', component: PrikaziKorisnikeAdmin},
 		{ path: '/restorani/:id', component: PrikazJednogRestorana},
 		{ path: '/pocetna/menadzer', component: PocetnaMenadzer},
-	    { path: '/pocetna/menadzer/dodaj-artikal/:id', component: DodajArtikal}
+	    { path: '/pocetna/menadzer/dodaj-artikal/:id', component: DodajArtikal},
+		{ path: '/pocetna/korpa', component: Korpa}
+
 	  ]
 });
 

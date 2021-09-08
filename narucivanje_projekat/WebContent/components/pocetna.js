@@ -157,7 +157,7 @@ Vue.component("pocetna-strana", {
             then(this.$forceUpdate());
         },
         korpa: function(){
-        	 router.push(`/korpa/${korisnik.korisnik.idKorisnika}`);
+        	 router.push(`pocetna/korpa`);
         }
     }
 
