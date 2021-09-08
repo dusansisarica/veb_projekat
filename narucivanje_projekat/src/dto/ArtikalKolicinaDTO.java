@@ -5,6 +5,7 @@ import beans.Artikal;
 public class ArtikalKolicinaDTO {
 	private Artikal artikal;
 	private int kolicina;
+	
 
 	public ArtikalKolicinaDTO(Artikal artikal, int cena) {
 		super();
