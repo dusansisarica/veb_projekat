@@ -30,10 +30,17 @@ Vue.component("korpa", {
             </div>
             </div>
             <p>Cena porudžbine je {{cena}}</p>
+             <button class="btn btn-outline-success" v-on:click="kreirajPorudzbinu(korisnik.korisnik.idKorisnika)"  type="submit">Kreiraj porudzbinu</button>
         </div>
         <div v-else>
             korpa je prazna
         </div>
     </form>
-    `
+    `,
+     methods : {
+        kreirajPorudzbinu : function(korisnikId){
+           event.preventDefault();
+           axios.post(`/narucivanje/rest/porudzbine/${korisnikId}`);
+        }
+    }
 });

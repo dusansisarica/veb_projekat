@@ -45,11 +45,11 @@ public class PorudzbineService {
 	}
 	
 	@POST
-	@Path("/")
+	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response kreirajPorudzbinu(Porudzbina porudzbina, @Context HttpServletRequest request) {
-		if(PorudzbineDAO.kreirajPorudzbinu(porudzbina)) {
+	public Response kreirajPorudzbinu(@PathParam("id") String id, @Context HttpServletRequest request) {
+		if(PorudzbineDAO.kreirajPorudzbinu(id)) {
 			return Response.status(200).build();
 		}
 		else {

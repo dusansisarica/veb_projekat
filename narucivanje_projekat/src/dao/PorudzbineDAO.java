@@ -3,9 +3,12 @@ package dao;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.ws.rs.PathParam;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -15,6 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import beans.Artikal;
 import beans.Kupac;
 import beans.Porudzbina;
+import beans.TipPorudzbine;
 import dto.ArtikalKolicinaDTO;
 import dto.PorudzbineDTO;
 
@@ -51,16 +55,18 @@ public class PorudzbineDAO {
 
 	}
 	
-	public static boolean kreirajPorudzbinu(Porudzbina porudzbina) {
+	public static boolean kreirajPorudzbinu(@PathParam("id") String id) {
 
 				
 		ArrayList<Porudzbina> svePorudzbine = new ArrayList<Porudzbina>();
 		for (Porudzbina p : porudzbine.values()) {
 			svePorudzbine.add(p);
 		}
-		
-		int idP = svePorudzbine.size() + 1;
-		Porudzbina porudzbinaUpis = new Porudzbina(Integer.toString(idP),porudzbina.getIdRestoran(), porudzbina.getArtikli(), porudzbina.getIdKupac(), porudzbina.getDatumVreme(), porudzbina.getCena(), porudzbina.getTipPorudzbine());
+		Kupac kupac = KorisniciDAO.pronadjiKupcaPoId(id);
+		Artikal a = ArtikliDAO.dobaviArtikalPrekoId(kupac.getKorpa().getArtikli().keySet().stream().findFirst().get());
+		Porudzbina porudzbinaUpis = new Porudzbina(Long.toString(generisiId()), a.getRestoran(),
+													kupac.getKorpa().getArtikli(), kupac.getIdKorisnika(), LocalDateTime.now(), 
+													kupac.getKorpa().getCena(), TipPorudzbine.obrada );
 
 		svePorudzbine.add(porudzbinaUpis);
 		porudzbine.put(porudzbinaUpis.getIdPorudzbine(), porudzbinaUpis);
@@ -73,6 +79,10 @@ public class PorudzbineDAO {
 			e.printStackTrace();
 		}
 		return true;
+	}
+	
+	public static long generisiId() {
+		return (System.currentTimeMillis()/ 10) % 10000000000L;
 	}
 	
 	public static Porudzbina dobaviPorudzbinu(String id) {
