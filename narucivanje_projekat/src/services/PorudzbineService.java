@@ -22,6 +22,7 @@ import dao.ArtikliDAO;
 import dao.PorudzbineDAO;
 import dao.RestoraniDAO;
 import dto.ArtikalKolicinaDTO;
+import dto.PorudzbinaDTO;
 import dto.PorudzbineDTO;
 
 @Path("/porudzbine")
@@ -102,6 +103,41 @@ public class PorudzbineService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public double dobaviCenu(@PathParam("id") String id) {
 		return PorudzbineDAO.dobaviCenu(id);
+	}
+	
+	@GET
+	@Path("/dobaviSvePorudzbineRestorana/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PorudzbinaDTO> dobaviNarudzbineZaRestoran(@PathParam("id") String id) {
+		return PorudzbineDAO.dobaviNarudzbineZaRestoran(id);
+	}
+	
+	@POST
+	@Path("/odobriPorudzbinu/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response odobriPorudzbinu(@PathParam("id") String id, @Context HttpServletRequest request) {
+		if(PorudzbineDAO.odobriPorudzbinu(id)) {
+			return Response.status(200).build();
+		}
+		else {
+			return Response.status(400).build();
+		}
+
+	}
+	
+	@POST
+	@Path("/cekaDostavljaca/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response cekaDostavljaca(@PathParam("id") String id, @Context HttpServletRequest request) {
+		if(PorudzbineDAO.cekaDostavljaca(id)) {
+			return Response.status(200).build();
+		}
+		else {
+			return Response.status(400).build();
+		}
+
 	}
 	
 }

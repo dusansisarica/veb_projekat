@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import beans.Korisnik;
 import beans.KorisnikRegistracija;
 import beans.Kupac;
+import beans.Menadzer;
 import beans.NormalanKupac;
 import dto.KorisnikSaUlogom;
 import dto.KorisnikUlogaDTO;
@@ -201,6 +202,28 @@ public class KorisniciDAO {
 		}
 		return null;
 	}
+	
+	public static List<Menadzer> dobaviSveMenadzere(){
+		List<Menadzer> menadzeri = new ArrayList<Menadzer>();
+		for (KorisnikSaUlogom krg : dobaviSveKorisnike()) {
+			if (krg.getUloga() == "menadzer") {
+				menadzeri.add((Menadzer)krg.getKorisnik());
+			}
+		}
+		return menadzeri;
+	}
+	
+	public static Menadzer pronadjiMenadzeraPoId(String idMenadzera) {
+		List<Menadzer> menadzeri = dobaviSveMenadzere();
+		for(Menadzer menadzer : menadzeri) {
+			if (menadzer.getIdKorisnika().equals(idMenadzera)) {
+				return menadzer;
+			}
+		}
+		return null;
+	}
+
+
 
 	
 }

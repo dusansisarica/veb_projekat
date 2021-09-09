@@ -3,8 +3,10 @@ package dao;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,9 +19,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Artikal;
 import beans.Kupac;
+import beans.Menadzer;
 import beans.Porudzbina;
 import beans.TipPorudzbine;
 import dto.ArtikalKolicinaDTO;
+import dto.PorudzbinaDTO;
 import dto.PorudzbineDTO;
 
 public class PorudzbineDAO {
@@ -64,8 +68,11 @@ public class PorudzbineDAO {
 		}
 		Kupac kupac = KorisniciDAO.pronadjiKupcaPoId(id);
 		Artikal a = ArtikliDAO.dobaviArtikalPrekoId(kupac.getKorpa().getArtikli().keySet().stream().findFirst().get());
+		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+		Date date = new Date(System.currentTimeMillis());
+		
 		Porudzbina porudzbinaUpis = new Porudzbina(Long.toString(generisiId()), a.getRestoran(),
-													kupac.getKorpa().getArtikli(), kupac.getIdKorisnika(), LocalDateTime.now(), 
+													kupac.getKorpa().getArtikli(), kupac.getIdKorisnika(), date, 
 													kupac.getKorpa().getCena(), TipPorudzbine.obrada );
 
 		svePorudzbine.add(porudzbinaUpis);
@@ -80,6 +87,17 @@ public class PorudzbineDAO {
 		}
 		return true;
 	}
+	
+	public static void upisiPorudzbine(List<Porudzbina> svePorudzbine) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), svePorudzbine);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	
 	public static long generisiId() {
 		return (System.currentTimeMillis()/ 10) % 10000000000L;
@@ -145,5 +163,52 @@ public class PorudzbineDAO {
 	public static double dobaviCenu(String id) {
 		// TODO Auto-generated method stub
 		return KorisniciDAO.pronadjiKupcaPoId(id).getKorpa().getCena();
+	}
+
+	public static List<PorudzbinaDTO> dobaviNarudzbineZaRestoran(String id) {
+		Menadzer menadzer =  KorisniciDAO.pronadjiMenadzeraPoId(id);
+		List<PorudzbinaDTO> porudzbineRestorana = new ArrayList<PorudzbinaDTO>();
+		for (Porudzbina p : porudzbine.values()) {
+			if (p.getIdRestoran().equals(menadzer.getRestoranId())) {
+				List<ArtikalKolicinaDTO> artikalKolicina = new ArrayList<ArtikalKolicinaDTO>();
+				for (String key : p.getArtikli().keySet()) {
+					artikalKolicina.add(new ArtikalKolicinaDTO(ArtikliDAO.dobaviArtikalPrekoId(key), p.getArtikli().get(key)));
+				}
+				porudzbineRestorana.add(new PorudzbinaDTO(artikalKolicina, p.getIdPorudzbine()));
+			}
+		}
+		return porudzbineRestorana;
+	}
+	
+	public static boolean odobriPorudzbinu(String id) {
+		Porudzbina porudzbina = dobaviPorudzbinu(id);
+		Porudzbina porudzbinaUpis = new Porudzbina(porudzbina.getIdPorudzbine(), porudzbina.getIdRestoran(),
+				porudzbina.getArtikli(), porudzbina.getIdKupac(), porudzbina.getDatumVreme(), 
+				porudzbina.getCena(), TipPorudzbine.uPripremi );
+		kopirajPorudzbinuIUpisi(porudzbinaUpis);
+		return true;
+	}
+	
+	public static void kopirajPorudzbinuIUpisi(Porudzbina novaPorudzbina) {
+		for (Porudzbina p : porudzbine.values()) {
+			if (p.getIdPorudzbine().equals(novaPorudzbina.getIdPorudzbine())) {
+				porudzbine.replace(p.getIdPorudzbine(), novaPorudzbina);
+			}
+		}
+		List<Porudzbina> svePorudzbine = new ArrayList<Porudzbina>();
+		for (Porudzbina p : porudzbine.values()) {
+			svePorudzbine.add(p);
+		}
+		
+		upisiPorudzbine(svePorudzbine);
+	}
+
+	public static boolean cekaDostavljaca(String id) {
+		Porudzbina porudzbina = dobaviPorudzbinu(id);
+		Porudzbina porudzbinaUpis = new Porudzbina(porudzbina.getIdPorudzbine(), porudzbina.getIdRestoran(),
+				porudzbina.getArtikli(), porudzbina.getIdKupac(), porudzbina.getDatumVreme(), 
+				porudzbina.getCena(), TipPorudzbine.cekaDostavljaca );
+		kopirajPorudzbinuIUpisi(porudzbinaUpis);
+		return true;
 	}
 }

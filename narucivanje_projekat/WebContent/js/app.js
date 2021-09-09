@@ -12,6 +12,7 @@ const PrikazJednogRestorana = {template : '<prikazi-restoran></prikazi-restoran>
 const PocetnaMenadzer = {template : '<pocetna-menadzer></pocetna-menadzer>'}
 const DodajArtikal = {template : '<dodaj-artikal></dodaj-artikal>'}
 const Korpa = {template : '<korpa></korpa>'}
+const PorudzbineMenadzer = {template : '<porudzbine-menadzer></porudzbine-menadzer>'}
 
 
 
@@ -33,8 +34,8 @@ const router = new VueRouter({
 		{ path: '/restorani/:id', component: PrikazJednogRestorana},
 		{ path: '/pocetna/menadzer', component: PocetnaMenadzer},
 	    { path: '/pocetna/menadzer/dodaj-artikal/:id', component: DodajArtikal},
-		{ path: '/pocetna/korpa', component: Korpa}
-
+		{ path: '/pocetna/korpa', component: Korpa},
+		{ path: '/pocetna/menadzer/porudzbine', component: PorudzbineMenadzer}
 	  ]
 });
 
