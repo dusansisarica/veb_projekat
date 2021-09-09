@@ -7,6 +7,7 @@ public class PorudzbinaDTO {
 	private List<ArtikalKolicinaDTO> artikalKolicina = new ArrayList<ArtikalKolicinaDTO>();
 	private String idNarudzbine;
 	
+	
 	public PorudzbinaDTO() {
 		super();
 		// TODO Auto-generated constructor stub
