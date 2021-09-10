@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -81,6 +82,32 @@ public class KupacDAO {
 			e.printStackTrace();
 		}
 		return true;
+	}
+	
+	public static void kopirajKupcaIUpisi(Kupac kupac) {
+		List<Kupac> sviKupci = new ArrayList<>();
+		for (Kupac k : kupci.values()) {
+			sviKupci.add(k);
+		}
+		for (Kupac k : sviKupci) {
+			if (k.getIdKorisnika().equals(kupac.getIdKorisnika())) {
+				kupci.replace(k.getIdKorisnika(), kupac);
+			}
+		}
+		List<Kupac> sviKupciUpis = new ArrayList<>();
+
+		for (Kupac k : kupci.values()) {
+			sviKupciUpis.add(k);
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), sviKupciUpis);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 	
 	public static Kupac nadjiKupca(String id) {

@@ -65,6 +65,9 @@ Vue.component("pocetna-menadzer", {
                 <div class="card-body">
                     <button class="btn btn-outline-success" v-on:click="pogledajPorudzbine()" type="submit">Pogledaj porudžbine</button>
                 </div>
+                <div class="card-body">
+                    <button class="btn btn-outline-success" v-on:click="pogledajKomentare()" type="submit">Pogledaj komentare</button>
+                </div>
         </div>
     </form>
     `,
@@ -75,6 +78,9 @@ Vue.component("pocetna-menadzer", {
         },
         pogledajPorudzbine : function(){
           router.push(`/pocetna/menadzer/porudzbine`);
+        },
+        pogledajKomentare : function(){
+          router.push(`/pocetna/menadzer/komentari`);
         }
     }
 });

@@ -7,6 +7,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 import beans.Admin;
+import beans.Dostavljac;
 import beans.Korisnik;
 
 import beans.KorisnikRegistracija;
@@ -85,9 +87,10 @@ public class LoginService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response login(KorisnikRegistracija korisnik, @Context HttpServletRequest request) {
 		Korisnik ulogovaniKorisnik = KorisniciDAO.find(korisnik);
-		if (ulogovaniKorisnik == null) {
+		if (ulogovaniKorisnik == null || ulogovaniKorisnik.isObrisan()) {
 			return Response.status(400).build();
 		}
+		
 		KorisnikSaUlogom korisnikUlogovani = new KorisnikSaUlogom(ulogovaniKorisnik, 
 				KorisniciDAO.pronadjiKorisnikuUlogu(ulogovaniKorisnik.getIdKorisnika()));
 		
@@ -103,6 +106,11 @@ public class LoginService {
 			request.getSession().setAttribute("user", korisnikUlogovani);
 			return Response.status(200).entity("/pocetna/menadzer").build();
 		}
+		else if (ulogovaniKorisnik.getClass() == Dostavljac.class){
+			request.getSession().setAttribute("user", korisnikUlogovani);
+			return Response.status(200).entity("/pocetna/dostavljac").build();
+		}
+
 		return Response.status(400).build();
 	}
 	
@@ -143,6 +151,14 @@ public class LoginService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<KorisnikSaUlogom> dobaviSveKorisnike(@Context HttpServletRequest request) {
 		return KorisniciDAO.dobaviSveKorisnike();
+	}
+	
+	@GET
+	@Path("/dobaviKupcaPoId/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Kupac dobaviKupcaPoId(@PathParam("id") String id) {
+		return KorisniciDAO.pronadjiKupcaPoId(id);
 	}
 
 	@GET

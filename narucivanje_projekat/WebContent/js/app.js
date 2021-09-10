@@ -13,6 +13,10 @@ const PocetnaMenadzer = {template : '<pocetna-menadzer></pocetna-menadzer>'}
 const DodajArtikal = {template : '<dodaj-artikal></dodaj-artikal>'}
 const Korpa = {template : '<korpa></korpa>'}
 const PorudzbineMenadzer = {template : '<porudzbine-menadzer></porudzbine-menadzer>'}
+const PocetnaDostavljac = {template : '<pocetna-dostavljac></pocetna-dostavljac>'}
+const PorudzbineOdobravanje = {template : '<porudzbineZaOdobravanje></porudzbineZaOdobravanje>'}
+const KupacPorudzbine = {template : '<kupac-porudzbine></kupac-porudzbine>'}
+const KomentariMenadzer = {template : '<komentarMenadzer></komentarMenadzer>'}
 
 
 
@@ -35,7 +39,13 @@ const router = new VueRouter({
 		{ path: '/pocetna/menadzer', component: PocetnaMenadzer},
 	    { path: '/pocetna/menadzer/dodaj-artikal/:id', component: DodajArtikal},
 		{ path: '/pocetna/korpa', component: Korpa},
-		{ path: '/pocetna/menadzer/porudzbine', component: PorudzbineMenadzer}
+		{ path: '/pocetna/menadzer/porudzbine', component: PorudzbineMenadzer},
+		{ path: '/pocetna/dostavljac', component: PocetnaDostavljac},
+		{ path: '/pocetna/menadzer/odobravanje', component: PorudzbineOdobravanje},
+		{ path: '/pocetna/porudzbine', component: KupacPorudzbine},
+		{ path: '/pocetna/menadzer/komentari', component: KomentariMenadzer}
+
+
 	  ]
 });
 

@@ -25,7 +25,7 @@ Vue.component("korpa", {
                 <ul class="list-group list-group-flush" >
                     <li class="list-group-item">Naziv: {{value.artikal.naziv}}</li>
                     <li class="list-group-item">Cena: {{value.artikal.cena}}</li>
-                    <li class="list-group-item">Količina: {{value.kolicina}}</li>
+                    <li class="list-group-item">Količina: {{value.cena}}</li>
                 </ul>
             </div>
             </div>

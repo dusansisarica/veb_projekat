@@ -23,6 +23,9 @@ import dao.PorudzbineDAO;
 import dao.RestoraniDAO;
 import dto.ArtikalKolicinaDTO;
 import dto.PorudzbinaDTO;
+import dto.PorudzbinaDostavljacDTO;
+import dto.PorudzbinaDostavljacObjekatDTO;
+import dto.PorudzbinaSaStatusomDTO;
 import dto.PorudzbineDTO;
 
 @Path("/porudzbine")
@@ -138,6 +141,73 @@ public class PorudzbineService {
 			return Response.status(400).build();
 		}
 
+	}
+	
+	@GET
+	@Path("/dobaviSvePorudzbineKojeNemajuDostavljaca")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PorudzbinaDTO> dobaviPorudzbineBezDostavljaca() {
+		return PorudzbineDAO.dobaviPorudzbineBezDostavljaca();
+	}
+	
+	@POST
+	@Path("/posaljiZahtevZaDostavljaca")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response posaljiZahtevMenadzeru(PorudzbinaDostavljacDTO dto) {
+		if(PorudzbineDAO.posaljiZahtevMenadzeru(dto)) {
+			return Response.status(200).build();
+		}
+		else {
+			return Response.status(400).build();
+		}
+	}
+	
+	@GET
+	@Path("/dobaviSvePorudzbineZaOdobrenjeDostavljaca/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PorudzbinaDostavljacObjekatDTO> dobaviSvePorudzbineZaOdobrenjeDostavljaca(@PathParam("id") String id) {
+		return PorudzbineDAO.dobaviSvePorudzbineZaOdobrenjeDostavljaca(id);
+	}
+	
+	@POST
+	@Path("/odobriPorudzbinuDostavljacu")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response odobriPorudzbinuDostavljacu(PorudzbinaDostavljacDTO dto) {
+		if(PorudzbineDAO.odobriPorudzbinuDostavljacu(dto)) {
+			return Response.status(200).build();
+		}
+		else {
+			return Response.status(400).build();
+		}
+	}
+	
+	@GET
+	@Path("/dobaviPorudzbineZaKojeJeZaduzenDostavljac/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PorudzbinaDTO> dobaviPorudzbineZaKojeJeZaduzenDostavljac(@PathParam("id") String id) {
+		return PorudzbineDAO.dobaviPorudzbineZaKojeJeZaduzenDostavljac(id);
+	}
+	
+	@POST
+	@Path("/dostavljenaPorudzbina")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response dostavljenaPorudzbina(PorudzbinaDostavljacDTO dto) {
+		if(PorudzbineDAO.dostavljenaPorudzbina(dto)) {
+			return Response.status(200).build();
+		}
+		else {
+			return Response.status(400).build();
+		}
+	}
+	
+	@GET
+	@Path("/dobaviSvePorudzbineKupca/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<PorudzbinaSaStatusomDTO> dobaviSvePorudzbineKupca(@PathParam("id") String id) {
+		return PorudzbineDAO.dobaviSvePorudzbineKupca(id);
 	}
 	
 }

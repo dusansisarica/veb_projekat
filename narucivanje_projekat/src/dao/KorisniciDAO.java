@@ -21,11 +21,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import beans.Dostavljac;
 import beans.Korisnik;
 import beans.KorisnikRegistracija;
 import beans.Kupac;
 import beans.Menadzer;
 import beans.NormalanKupac;
+import beans.Porudzbina;
 import dto.KorisnikSaUlogom;
 import dto.KorisnikUlogaDTO;
 
@@ -88,6 +90,7 @@ public class KorisniciDAO {
 			return false;
 		}
 		
+		korisnik.getKorisnik().setObrisan(false);
 		korisnik.getKorisnikRegistracija().setId(Integer.toString(korisnici.size()));
 		ArrayList<KorisnikRegistracija> sviKorisnici = new ArrayList<KorisnikRegistracija>();
 		for (KorisnikRegistracija k : korisnici.values()) {
@@ -158,6 +161,7 @@ public class KorisniciDAO {
 			else if(kr.getUloga().equals("admin")) {
 				sviKorisnici.add(new KorisnikSaUlogom(AdminDAO.nadjiAdmina(kr.getId()), "admin"));
 			}
+
 		}
 		return sviKorisnici;
 	}
@@ -176,9 +180,13 @@ public class KorisniciDAO {
 	public static String pronadjiKorisnikuUlogu(String id) {
 		List<KorisnikSaUlogom> sviKorisnici = dobaviSveKorisnike();
 		for (KorisnikSaUlogom ksu : sviKorisnici) {
-			if (ksu.getKorisnik().getIdKorisnika() == id) {
-				return ksu.getUloga();
+			if(ksu.getKorisnik() != null) {
+				if (ksu.getKorisnik().getIdKorisnika().equals(id)) {
+					return ksu.getUloga();
+				}
+
 			}
+			
 		}
 		return null;
 	}
@@ -222,6 +230,41 @@ public class KorisniciDAO {
 		}
 		return null;
 	}
+	
+	public static List<Dostavljac> dobaviSveDostavljace(){
+		List<Dostavljac> dostavljaci = new ArrayList<Dostavljac>();
+		for (KorisnikSaUlogom krg : dobaviSveKorisnike()) {
+			if (krg.getUloga() == "dostavljac") {
+				dostavljaci.add((Dostavljac)krg.getKorisnik());
+			}
+		}
+		return dostavljaci;
+	}
+
+	public static Dostavljac pronadjiDostavljacaPoId(String idDostavljaca) {
+		List<Dostavljac> dostavljaci = dobaviSveDostavljace();
+		for(Dostavljac dostavljac : dostavljaci) {
+			if (dostavljac.getIdKorisnika().equals(idDostavljaca)) {
+				return dostavljac;
+			}
+		}
+		return null;
+	}
+	
+	public static void upisiKorisnike() {
+		List<KorisnikRegistracija> sviKorisnici = new ArrayList<>();
+		
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), sviKorisnici);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
 
 
 

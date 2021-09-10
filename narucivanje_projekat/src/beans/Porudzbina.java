@@ -18,6 +18,41 @@ public class Porudzbina implements Serializable{
 	private Date datumVreme;
 	private double cena;
 	private String idKupac;
+	private String idDostavljaca;
+	private List<String> zainteresovaniDostavljaci = new ArrayList<>();
+	
+	
+	
+	public List<String> getZainteresovaniDostavljaci() {
+		return zainteresovaniDostavljaci;
+	}
+	public void setZainteresovaniDostavljaci(List<String> zainteresovaniDostavljaci) {
+		this.zainteresovaniDostavljaci = zainteresovaniDostavljaci;
+	}
+	public Porudzbina(String idPorudzbine, HashMap<String, Integer> artikli, String idRestoran, Date datumVreme,
+			double cena, String idKupac, String idDostavljaca, List<String> zainteresovaniDostavljaci,
+			TipPorudzbine tipPorudzbine) {
+		super();
+		this.idPorudzbine = idPorudzbine;
+		this.artikli = artikli;
+		this.idRestoran = idRestoran;
+		this.datumVreme = datumVreme;
+		this.cena = cena;
+		this.idKupac = idKupac;
+		this.idDostavljaca = idDostavljaca;
+		this.zainteresovaniDostavljaci = zainteresovaniDostavljaci;
+		this.tipPorudzbine = tipPorudzbine;
+	}
+	public String getIdDostavljaca() {
+		return idDostavljaca;
+	}
+	public void setIdDostavljaca(String idDostavljaca) {
+		this.idDostavljaca = idDostavljaca;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	private TipPorudzbine tipPorudzbine;
 	
 	public Porudzbina() {

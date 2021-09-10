@@ -14,7 +14,7 @@ public class Kupac extends Korisnik {
 	private Object tipKupca;
 	private List<Porudzbina> svePorudzbine = new ArrayList<Porudzbina>();
 	private Porudzbina korpa;
-	private int brojSakupljenihBodova;
+	private double brojSakupljenihBodova;
 
 	public Porudzbina getKorpa() {
 		return korpa;
@@ -24,11 +24,11 @@ public class Kupac extends Korisnik {
 		this.korpa = korpa;
 	}
 
-	public int getBrojSakupljenihBodova() {
+	public double getBrojSakupljenihBodova() {
 		return brojSakupljenihBodova;
 	}
 
-	public void setBrojSakupljenihBodova(int brojSakupljenihBodova) {
+	public void setBrojSakupljenihBodova(double brojSakupljenihBodova) {
 		this.brojSakupljenihBodova = brojSakupljenihBodova;
 	}
 
