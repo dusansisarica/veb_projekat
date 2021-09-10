@@ -171,5 +171,20 @@ public class LoginService {
 //		}
 		return KorisniciDAO.pronadjiKorisnikePoImenu(ime);
 	}
+	
+	@POST
+	@Path("/obrisiKorisnika/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response odobriPorudzbinu(@PathParam("id") String id, @Context HttpServletRequest request) {
+		if(KorisniciDAO.obrisiKorisnika(id)) {
+			return Response.status(200).build();
+		}
+		else {
+			return Response.status(400).build();
+		}
+
+	}
+	
 
 }

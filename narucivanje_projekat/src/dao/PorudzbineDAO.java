@@ -21,8 +21,11 @@ import beans.Artikal;
 import beans.Dostavljac;
 import beans.Kupac;
 import beans.Menadzer;
+import beans.NormalanKupac;
 import beans.Porudzbina;
+import beans.SrebrniKupac;
 import beans.TipPorudzbine;
+import beans.ZlatniKupac;
 import dto.ArtikalKolicinaDTO;
 import dto.PorudzbinaDTO;
 import dto.PorudzbinaDostavljacDTO;
@@ -80,7 +83,6 @@ public class PorudzbineDAO {
 													kupac.getKorpa().getCena(),  TipPorudzbine.obrada );
 
 		porudzbinaUpis.setIdDostavljaca(null);
-		kupac.setBrojSakupljenihBodova(kupac.getBrojSakupljenihBodova() + (porudzbinaUpis.getCena()/1000 * 133));
 		kupac.setKorpa(null);
 		KupacDAO.kopirajKupcaIUpisi(kupac);
 		
@@ -147,7 +149,6 @@ public class PorudzbineDAO {
 			}
 		}
 		else {
-			kupac.getKorpa().setIdRestoran(ArtikliDAO.dobaviArtikalPrekoId(porudzbineDto.getArtikalId()).getRestoran());
 		}
 		Porudzbina porudzbina = kupac.getKorpa();
 		if (!porudzbina.getArtikli().containsKey(porudzbineDto.getArtikalId())) {
@@ -179,7 +180,15 @@ public class PorudzbineDAO {
 
 	public static double dobaviCenu(String id) {
 		// TODO Auto-generated method stub
-		return KorisniciDAO.pronadjiKupcaPoId(id).getKorpa().getCena();
+		Kupac kupac = KorisniciDAO.pronadjiKupcaPoId(id);
+		double cena = kupac.getKorpa().getCena();
+		if(kupac.getTipKupca().getClass() == SrebrniKupac.class) {
+			return cena - cena*0.03;
+		}
+		else if(kupac.getTipKupca().getClass() == ZlatniKupac.class) {
+			return cena - cena*0.05;
+		}
+		return cena;
 	}
 
 	public static List<PorudzbinaDTO> dobaviNarudzbineZaRestoran(String id) {
@@ -314,6 +323,17 @@ public class PorudzbineDAO {
 
 	public static boolean dostavljenaPorudzbina(PorudzbinaDostavljacDTO dto) {
 		Porudzbina porudzbina = dobaviPorudzbinu(dto.getIdPorudzbine());
+		Kupac kupac = KorisniciDAO.pronadjiKupcaPoId(porudzbina.getIdKupac());
+		kupac.setBrojSakupljenihBodova(kupac.getBrojSakupljenihBodova() + (porudzbina.getCena()/1000 * 133));
+		
+		if(kupac.getBrojSakupljenihBodova() >= 3000) {
+			kupac.setTipKupca(new SrebrniKupac());
+		}
+		else if (kupac.getBrojSakupljenihBodova() >= 4000) {
+			kupac.setTipKupca(new ZlatniKupac());
+		}
+		
+		KupacDAO.kopirajKupcaIUpisi(kupac);
 		Dostavljac dostavljac = KorisniciDAO.pronadjiDostavljacaPoId(dto.getIdDostavljaca());
 		List<Porudzbina> porudzbine1 = new ArrayList<>();
 

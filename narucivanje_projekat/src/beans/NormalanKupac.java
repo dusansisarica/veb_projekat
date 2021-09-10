@@ -1,5 +1,11 @@
 package beans;
 
-public class NormalanKupac implements ITipKupca {
+public class NormalanKupac{
 	public String imeTipa = "Normalan kupac";
+
+	public static double izracunajCenu(double cena) {
+		// TODO Auto-generated method stub
+		return cena;
+	}
+	
 }

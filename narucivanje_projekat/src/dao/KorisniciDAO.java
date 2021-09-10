@@ -264,6 +264,17 @@ public class KorisniciDAO {
 		}
 	}
 
+	public static boolean obrisiKorisnika(String id) {
+		List<KorisnikSaUlogom> sviKorisnici = dobaviSveKorisnike();
+		for(KorisnikSaUlogom k : sviKorisnici) {
+			if (k.getKorisnik().getIdKorisnika().equals(id)) {
+				k.getKorisnik().setObrisan(true);
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 
 
