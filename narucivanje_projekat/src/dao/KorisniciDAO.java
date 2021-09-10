@@ -21,6 +21,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import beans.Admin;
 import beans.Korisnik;
 import beans.KorisnikRegistracija;
 import beans.Kupac;
@@ -28,6 +29,7 @@ import beans.Menadzer;
 import beans.NormalanKupac;
 import dto.KorisnikSaUlogom;
 import dto.KorisnikUlogaDTO;
+import dto.KupacDTO;
 
 
 public class KorisniciDAO {
@@ -49,6 +51,101 @@ public class KorisniciDAO {
 	public KorisniciDAO(String contextPath) {
 		ucitajKorisnike(contextPath);
 	}
+	
+	public static void izmeniKupca(KupacDTO kupacDto) {
+		KorisnikRegistracija korisnikRegistracija = new KorisnikRegistracija();
+		for(KorisnikRegistracija kr : korisnici.values()) {
+			if(kr.getId().equals(kupacDto.getIdKorisnika())) {
+				korisnikRegistracija = kr;
+			}
+		}
+		korisnikRegistracija.setKorisnickoIme(kupacDto.getKorisnickoIme());
+		korisnici.replace(kupacDto.getIdKorisnika(), korisnikRegistracija);
+		
+		List<KorisnikRegistracija> korisniciRegistracija = new ArrayList<KorisnikRegistracija>();
+		for(KorisnikRegistracija kr : korisnici.values()) {
+			korisniciRegistracija.add(kr);
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), korisniciRegistracija);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Kupac kupac = KupacDAO.nadjiKupca(korisnikRegistracija.getId());
+		kupac.setIme(kupacDto.getIme());
+		kupac.setPrezime(kupacDto.getPrezime());
+		kupac.setDatumRodjenja(kupacDto.getDatumRodjenja());
+		KupacDAO.izmeniKupca(kupac);
+		
+	}
+	
+	public static void izmeniMenadzera(KupacDTO kupacDto) {
+		KorisnikRegistracija korisnikRegistracija = new KorisnikRegistracija();
+		for(KorisnikRegistracija kr : korisnici.values()) {
+			if(kr.getId().equals(kupacDto.getIdKorisnika())) {
+				korisnikRegistracija = kr;
+			}
+		}
+		korisnikRegistracija.setKorisnickoIme(kupacDto.getKorisnickoIme());
+		korisnici.replace(kupacDto.getIdKorisnika(), korisnikRegistracija);
+		
+		List<KorisnikRegistracija> korisniciRegistracija = new ArrayList<KorisnikRegistracija>();
+		for(KorisnikRegistracija kr : korisnici.values()) {
+			korisniciRegistracija.add(kr);
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), korisniciRegistracija);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Menadzer menadzer = MenadzeriDAO.nadjiMenadzera(korisnikRegistracija.getId());
+		menadzer.setIme(kupacDto.getIme());
+		menadzer.setPrezime(kupacDto.getPrezime());
+		menadzer.setDatumRodjenja(kupacDto.getDatumRodjenja());
+		MenadzeriDAO.izmeniMenadzera(menadzer);
+		
+	}
+	
+	public static void izmeniAdmina(KupacDTO kupacDto) {
+		KorisnikRegistracija korisnikRegistracija = new KorisnikRegistracija();
+		for(KorisnikRegistracija kr : korisnici.values()) {
+			if(kr.getId().equals(kupacDto.getIdKorisnika())) {
+				korisnikRegistracija = kr;
+			}
+		}
+		korisnikRegistracija.setKorisnickoIme(kupacDto.getKorisnickoIme());
+		korisnici.replace(kupacDto.getIdKorisnika(), korisnikRegistracija);
+		
+		List<KorisnikRegistracija> korisniciRegistracija = new ArrayList<KorisnikRegistracija>();
+		for(KorisnikRegistracija kr : korisnici.values()) {
+			korisniciRegistracija.add(kr);
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), korisniciRegistracija);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Admin admin = AdminDAO.nadjiAdmina(korisnikRegistracija.getId());
+		admin.setIme(kupacDto.getIme());
+		admin.setPrezime(kupacDto.getPrezime());
+		admin.setDatumRodjenja(kupacDto.getDatumRodjenja());
+		AdminDAO.izmeniAdmina(admin);
+		
+	}
+	
+	
 
 	private void ucitajKorisnike(String contextPath) {
 		// TODO Auto-generated method stub
@@ -74,6 +171,15 @@ public class KorisniciDAO {
 		for (KorisnikRegistracija k : sviKorisnici) {
 			korisnici.put(k.getKorisnickoIme(), k);
 		}		
+	}
+	
+	public static KorisnikRegistracija dobaviKorisnikRegistracija(String id) {
+		for(KorisnikRegistracija kr : korisnici.values()) {
+			if(kr.getId().equals(id)) {
+				return kr;
+			}
+		}
+		return null;
 	}
 	
 	public static boolean upisiKorisnika(KorisnikUlogaDTO korisnik) {
@@ -176,8 +282,11 @@ public class KorisniciDAO {
 	public static String pronadjiKorisnikuUlogu(String id) {
 		List<KorisnikSaUlogom> sviKorisnici = dobaviSveKorisnike();
 		for (KorisnikSaUlogom ksu : sviKorisnici) {
-			if (ksu.getKorisnik().getIdKorisnika() == id) {
-				return ksu.getUloga();
+			if(ksu.getKorisnik() != null) {
+				if (ksu.getKorisnik().getIdKorisnika() == id) {
+					return ksu.getUloga();
+				}
+
 			}
 		}
 		return null;

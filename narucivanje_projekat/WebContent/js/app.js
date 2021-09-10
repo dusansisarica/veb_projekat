@@ -13,7 +13,11 @@ const PocetnaMenadzer = {template : '<pocetna-menadzer></pocetna-menadzer>'}
 const DodajArtikal = {template : '<dodaj-artikal></dodaj-artikal>'}
 const Korpa = {template : '<korpa></korpa>'}
 const PorudzbineMenadzer = {template : '<porudzbine-menadzer></porudzbine-menadzer>'}
-
+const ProfilKupac = {template : '<profil-kupac></profil-kupac>'}
+const ProfilMenadzer = {template : '<profil-menadzer></profil-menadzer>'}
+const IzmeniProfilKupac = {template : '<izmeni-profil-kupac></izmeni-profil-kupac>'}
+const IzmeniProfilMenadzer = {template : '<izmeni-profil-menadzer></izmeni-profil-menadzer>'}
+const IzmeniProfilAdmin = {template : '<izmeni-profil-admin></izmeni-profil-admin>'}
 
 
 
@@ -35,7 +39,12 @@ const router = new VueRouter({
 		{ path: '/pocetna/menadzer', component: PocetnaMenadzer},
 	    { path: '/pocetna/menadzer/dodaj-artikal/:id', component: DodajArtikal},
 		{ path: '/pocetna/korpa', component: Korpa},
-		{ path: '/pocetna/menadzer/porudzbine', component: PorudzbineMenadzer}
+		{ path: '/pocetna/menadzer/porudzbine', component: PorudzbineMenadzer},
+		{ path: '/pocetna/kupac/profil', component: ProfilKupac},
+		{ path: '/pocetna/menadzer/profil', component: ProfilMenadzer},
+		{ path: '/pocetna/kupac/izmeni/profil', component: IzmeniProfilKupac},
+		{ path: '/pocetna/menadzer/izmeni/profil', component: IzmeniProfilMenadzer},
+		{ path: '/pocetna/admin/izmeni/profil', component: IzmeniProfilAdmin}
 	  ]
 });
 

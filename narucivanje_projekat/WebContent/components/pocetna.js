@@ -96,6 +96,8 @@ Vue.component("pocetna-strana", {
             <div v-else class="ml-auto ">
             <a class="navbar-brand" style="color:white" href="http://localhost:8080/narucivanje/#/">Početna</a>
                 <button class="btn btn-outline-success" v-on:click="korpa" type="submit">Korpa</button> 
+                <button class="btn btn-outline-success" v-on:click="profilKupac" type="submit">Moj profil</button>
+                <button class="btn btn-outline-success" v-on:click="izmeniProfil" type="submit">Izmeni profil</button>
                 <label class="offset-md-0.2" style="color:white">Dobrodosli, {{korisnik.korisnik.ime}}</label>
                 <button class="btn btn-outline-success" type="submit" v-on:click="odjava">Odjavite se</button>
             </div>
@@ -137,6 +139,12 @@ Vue.component("pocetna-strana", {
     `,
 
     methods:{
+    	izmeniProfil : function(){
+            router.push('/pocetna/kupac/izmeni/profil');
+        },
+    	profilKupac : function(){
+            router.push('/pocetna/kupac/profil');
+        },
         prijaviteSe : function(){
             router.push(`/prijava`);
         },

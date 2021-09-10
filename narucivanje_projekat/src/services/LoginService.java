@@ -7,6 +7,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -31,6 +32,7 @@ import dao.MenadzeriDAO;
 import dao.PorudzbineDAO;
 import dto.KorisnikSaUlogom;
 import dto.KorisnikUlogaDTO;
+import dto.KupacDTO;
 
 @Path("")
 public class LoginService {
@@ -124,6 +126,14 @@ public class LoginService {
 		return (KorisnikSaUlogom) request.getSession().getAttribute("user");
 	}
 	
+	@GET
+	@Path("/korisnikRegistracija/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public KorisnikRegistracija dobaviKorisnikRegistracija(@PathParam("id") String id) {
+		return KorisniciDAO.dobaviKorisnikRegistracija(id);
+	}
+	
 	@POST
 	@Path("/registracija")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -135,6 +145,30 @@ public class LoginService {
 		else {
 			return Response.status(400).build();
 		}
+	}
+	
+	@POST
+	@Path("/izmeniKupca")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void izmeniKupca(KupacDTO kupacDto, @Context HttpServletRequest request) {
+		 KorisniciDAO.izmeniKupca(kupacDto);
+	}
+	
+	@POST
+	@Path("/izmeniMenadzera")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void izmeniMenadzera(KupacDTO kupacDto, @Context HttpServletRequest request) {
+		 KorisniciDAO.izmeniMenadzera(kupacDto);
+	}
+	
+	@POST
+	@Path("/izmeniAdmina")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void izmeniAdmina(KupacDTO kupacDto, @Context HttpServletRequest request) {
+		 KorisniciDAO.izmeniAdmina(kupacDto);
 	}
 	
 	@GET
