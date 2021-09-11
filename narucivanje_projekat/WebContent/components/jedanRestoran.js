@@ -7,7 +7,8 @@ Vue.component("prikazi-restoran", {
             tip : null,
             uloga : null,
             narudzbina : {korisnikId : null, artikalId : null, kolicina : null},
-            komentar : {tekst : null, ocena : null}
+            komentar : {tekst : null, ocena : null},
+            prikazDugmeta : false
         }
     },
 
@@ -61,7 +62,7 @@ Vue.component("prikazi-restoran", {
                     </li>
                     <li class="list-group-item">{{artikal.opis}}</li>
                     <li class="list-group-item" >Cena: {{artikal.cena}}</li>
-                    <li v-if="korisnik.uloga == 'kupac'" class="list-group-item">
+                    <li v-if="restoran.statusRestorana && korisnik.uloga == 'kupac'" class="list-group-item">
                       
                   	<td>Kolicina:</td>
                    	<td><input type = "text" v-model="narudzbina.kolicina"  name="kolicina"></td>
@@ -90,6 +91,12 @@ Vue.component("prikazi-restoran", {
             this.narudzbina.artikalId = idArtikla;
             this.narudzbina.korisnikId = this.korisnik.korisnik.idKorisnika;
             axios.post('/narucivanje/rest/porudzbine/dodajArtikalUPorudzbinu', this.narudzbina);
+        },
+        prikaziDugme : function(){
+            if (this.restoran.statusRestorana && this.korisnik.uloga == 'kupac'){
+                return true;
+            }
+            return false;
         }
     }
 

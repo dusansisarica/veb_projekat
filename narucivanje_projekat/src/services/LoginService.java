@@ -33,6 +33,7 @@ import dao.MenadzeriDAO;
 import dao.PorudzbineDAO;
 import dto.KorisnikSaUlogom;
 import dto.KorisnikUlogaDTO;
+import dto.KupacDTO;
 
 @Path("")
 public class LoginService {
@@ -87,7 +88,7 @@ public class LoginService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response login(KorisnikRegistracija korisnik, @Context HttpServletRequest request) {
 		Korisnik ulogovaniKorisnik = KorisniciDAO.find(korisnik);
-		if (ulogovaniKorisnik == null || ulogovaniKorisnik.isObrisan()) {
+		if (ulogovaniKorisnik == null || ulogovaniKorisnik.isObrisan() || ulogovaniKorisnik.isBanovan()) {
 			return Response.status(400).build();
 		}
 		
@@ -132,6 +133,22 @@ public class LoginService {
 		return (KorisnikSaUlogom) request.getSession().getAttribute("user");
 	}
 	
+	@GET
+	@Path("/korisnikRegistracija/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public KorisnikRegistracija dobaviKorisnikRegistracija(@PathParam("id") String id) {
+		return KorisniciDAO.dobaviKorisnikRegistracija(id);
+	}
+	
+	@GET
+	@Path("/dobaviKorisnika/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public KorisnikSaUlogom dobaviKorisnika(@PathParam("id") String id) {
+		return KorisniciDAO.dobaviKorisnika(id);
+	}
+	
 	@POST
 	@Path("/registracija")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -143,6 +160,30 @@ public class LoginService {
 		else {
 			return Response.status(400).build();
 		}
+	}
+	
+	@POST
+	@Path("/izmeniKupca")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void izmeniKupca(KupacDTO kupacDto, @Context HttpServletRequest request) {
+		 KorisniciDAO.izmeniKupca(kupacDto);
+	}
+	
+	@POST
+	@Path("/izmeniMenadzera")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void izmeniMenadzera(KupacDTO kupacDto, @Context HttpServletRequest request) {
+		 KorisniciDAO.izmeniMenadzera(kupacDto);
+	}
+	
+	@POST
+	@Path("/izmeniAdmina")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void izmeniAdmina(KupacDTO kupacDto, @Context HttpServletRequest request) {
+		 KorisniciDAO.izmeniAdmina(kupacDto);
 	}
 	
 	@GET
@@ -176,8 +217,22 @@ public class LoginService {
 	@Path("/obrisiKorisnika/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response odobriPorudzbinu(@PathParam("id") String id, @Context HttpServletRequest request) {
+	public Response obrisiKorisnika(@PathParam("id") String id, @Context HttpServletRequest request) {
 		if(KorisniciDAO.obrisiKorisnika(id)) {
+			return Response.status(200).build();
+		}
+		else {
+			return Response.status(400).build();
+		}
+
+	}
+	
+	@POST
+	@Path("/banujKorisnika/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response banujKorisnika(@PathParam("id") String id, @Context HttpServletRequest request) {
+		if(KorisniciDAO.banujKorisnika(id)) {
 			return Response.status(200).build();
 		}
 		else {

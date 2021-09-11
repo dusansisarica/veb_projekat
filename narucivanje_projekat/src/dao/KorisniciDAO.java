@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Dostavljac;
+import beans.Admin;
 import beans.Korisnik;
 import beans.KorisnikRegistracija;
 import beans.Kupac;
@@ -30,6 +31,7 @@ import beans.NormalanKupac;
 import beans.Porudzbina;
 import dto.KorisnikSaUlogom;
 import dto.KorisnikUlogaDTO;
+import dto.KupacDTO;
 
 
 public class KorisniciDAO {
@@ -51,6 +53,129 @@ public class KorisniciDAO {
 	public KorisniciDAO(String contextPath) {
 		ucitajKorisnike(contextPath);
 	}
+	
+	public static void izmeniKupca(KupacDTO kupacDto) {
+		KorisnikRegistracija korisnikRegistracija = new KorisnikRegistracija();
+		for(KorisnikRegistracija kr : korisnici.values()) {
+			if(kr.getId().equals(kupacDto.getIdKorisnika())) {
+				korisnikRegistracija = kr;
+			}
+		}
+		korisnikRegistracija.setKorisnickoIme(kupacDto.getKorisnickoIme());
+		korisnici.replace(kupacDto.getIdKorisnika(), korisnikRegistracija);
+		
+		List<KorisnikRegistracija> korisniciRegistracija = new ArrayList<KorisnikRegistracija>();
+		for(KorisnikRegistracija kr : korisnici.values()) {
+			korisniciRegistracija.add(kr);
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), korisniciRegistracija);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Kupac kupac = KupacDAO.nadjiKupca(korisnikRegistracija.getId());
+		kupac.setIme(kupacDto.getIme());
+		kupac.setPrezime(kupacDto.getPrezime());
+		kupac.setDatumRodjenja(kupacDto.getDatumRodjenja());
+		KupacDAO.izmeniKupca(kupac);
+		
+	}
+	
+	public static void izmeniMenadzera(KupacDTO kupacDto) {
+		KorisnikRegistracija korisnikRegistracija = new KorisnikRegistracija();
+		for(KorisnikRegistracija kr : korisnici.values()) {
+			if(kr.getId().equals(kupacDto.getIdKorisnika())) {
+				korisnikRegistracija = kr;
+			}
+		}
+		korisnikRegistracija.setKorisnickoIme(kupacDto.getKorisnickoIme());
+		korisnici.replace(kupacDto.getIdKorisnika(), korisnikRegistracija);
+		
+		List<KorisnikRegistracija> korisniciRegistracija = new ArrayList<KorisnikRegistracija>();
+		for(KorisnikRegistracija kr : korisnici.values()) {
+			korisniciRegistracija.add(kr);
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), korisniciRegistracija);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Menadzer menadzer = MenadzeriDAO.nadjiMenadzera(korisnikRegistracija.getId());
+		menadzer.setIme(kupacDto.getIme());
+		menadzer.setPrezime(kupacDto.getPrezime());
+		menadzer.setDatumRodjenja(kupacDto.getDatumRodjenja());
+		MenadzeriDAO.izmeniMenadzera(menadzer);
+		
+	}
+	
+	public static void upisiSveKorisnike() {
+		ArrayList<KorisnikRegistracija> sviKorisnici = new ArrayList<KorisnikRegistracija>();
+		for (KorisnikRegistracija k : korisnici.values()) {
+			sviKorisnici.add(k);
+		}
+		List<Menadzer> menadzeri = new ArrayList<>();
+		List<Dostavljac> dostavljaci = new ArrayList<>();
+		List<Kupac> kupci = new ArrayList<>();
+		List<Admin> admini = new ArrayList<>();
+
+		for(KorisnikRegistracija k : sviKorisnici) {
+			if (k.getUloga().equals("kupac")) {
+				kupci.add(KupacDAO.nadjiKupca(k.getId()));
+			}
+			else if (k.getUloga().equals("menadzer")) {
+				menadzeri.add(MenadzeriDAO.nadjiMenadzera(k.getId()));
+			}
+			else if (k.getUloga().equals("dostavljac")) {
+				dostavljaci.add(DostavljaciDAO.nadjiDostavljaca(k.getId()));
+			}
+		}
+		
+		MenadzeriDAO.upisiMenadzere(menadzeri);
+		DostavljaciDAO.upisiDostavljace(dostavljaci);
+		KupacDAO.upisiKupce(kupci);
+				
+	}
+	
+	public static void izmeniAdmina(KupacDTO kupacDto) {
+		KorisnikRegistracija korisnikRegistracija = new KorisnikRegistracija();
+		for(KorisnikRegistracija kr : korisnici.values()) {
+			if(kr.getId().equals(kupacDto.getIdKorisnika())) {
+				korisnikRegistracija = kr;
+			}
+		}
+		korisnikRegistracija.setKorisnickoIme(kupacDto.getKorisnickoIme());
+		korisnici.replace(kupacDto.getIdKorisnika(), korisnikRegistracija);
+		
+		List<KorisnikRegistracija> korisniciRegistracija = new ArrayList<KorisnikRegistracija>();
+		for(KorisnikRegistracija kr : korisnici.values()) {
+			korisniciRegistracija.add(kr);
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), korisniciRegistracija);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Admin admin = AdminDAO.nadjiAdmina(korisnikRegistracija.getId());
+		admin.setIme(kupacDto.getIme());
+		admin.setPrezime(kupacDto.getPrezime());
+		admin.setDatumRodjenja(kupacDto.getDatumRodjenja());
+		AdminDAO.izmeniAdmina(admin);
+		
+	}
+	
+	
 
 	private void ucitajKorisnike(String contextPath) {
 		// TODO Auto-generated method stub
@@ -78,6 +203,15 @@ public class KorisniciDAO {
 		}		
 	}
 	
+	public static KorisnikRegistracija dobaviKorisnikRegistracija(String id) {
+		for(KorisnikRegistracija kr : korisnici.values()) {
+			if(kr.getId().equals(id)) {
+				return kr;
+			}
+		}
+		return null;
+	}
+	
 	public static boolean upisiKorisnika(KorisnikUlogaDTO korisnik) {
 		
 		if(korisnici.containsKey(korisnik.getKorisnikRegistracija().getKorisnickoIme())) {
@@ -91,6 +225,7 @@ public class KorisniciDAO {
 		}
 		
 		korisnik.getKorisnik().setObrisan(false);
+		korisnik.getKorisnik().setBanovan(false);
 		korisnik.getKorisnikRegistracija().setId(Integer.toString(korisnici.size()));
 		ArrayList<KorisnikRegistracija> sviKorisnici = new ArrayList<KorisnikRegistracija>();
 		for (KorisnikRegistracija k : korisnici.values()) {
@@ -269,10 +404,31 @@ public class KorisniciDAO {
 		for(KorisnikSaUlogom k : sviKorisnici) {
 			if (k.getKorisnik().getIdKorisnika().equals(id)) {
 				k.getKorisnik().setObrisan(true);
-				return true;
+				korisnici.replace(dobaviKorisnikRegistracija(k.getKorisnik().getIdKorisnika()).getKorisnickoIme(), dobaviKorisnikRegistracija(k.getKorisnik().getIdKorisnika()));
 			}
 		}
-		return false;
+		upisiSveKorisnike();
+		return true;
+	}
+
+	public static boolean banujKorisnika(String id) {
+		List<KorisnikSaUlogom> sviKorisnici = dobaviSveKorisnike();
+		for(KorisnikSaUlogom k : sviKorisnici) {
+			if (k.getKorisnik().getIdKorisnika().equals(id)) {
+				if(k.getUloga() == "admin") {
+					return false;
+				}
+				k.getKorisnik().setBanovan(true);
+				korisnici.replace(dobaviKorisnikRegistracija(k.getKorisnik().getIdKorisnika()).getKorisnickoIme(), dobaviKorisnikRegistracija(k.getKorisnik().getIdKorisnika()));
+			}
+		}
+		upisiSveKorisnike();
+		return true;
+
+	}
+
+	public static KorisnikSaUlogom dobaviKorisnika(String id) {
+		return KorisniciDAO.dobaviKorisnika(id);
 	}
 
 

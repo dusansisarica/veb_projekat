@@ -376,6 +376,20 @@ public class PorudzbineDAO {
 		}
 		return kupcevePorudzbine;
 	}
+
+	public static boolean otkaziPorudzbinu(String id) {
+		Porudzbina porudzbina = PorudzbineDAO.dobaviPorudzbinu(id);
+		porudzbina.setTipPorudzbine(TipPorudzbine.otkazana);
+		Kupac kupac = KupacDAO.nadjiKupca(porudzbina.getIdKupac());
+		kupac.setBrojSakupljenihBodova(kupac.getBrojSakupljenihBodova() - (porudzbina.getCena()/1000 * 133 * 4));
+		if (kupac.getBrojSakupljenihBodova() < 0) {
+			kupac.setBrojSakupljenihBodova(0);
+		}
+		kupac.setSumnjiviKupac(kupac.getSumnjiviKupac() + 1);
+		KupacDAO.kopirajKupcaIUpisi(kupac);
+		kopirajPorudzbinuIUpisi(porudzbina);
+		return true;
+	}
 	
 
 

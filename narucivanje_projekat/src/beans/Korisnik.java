@@ -16,6 +16,15 @@ public class Korisnik implements Serializable {
 	private String prezime;
 	private boolean pol;
 	private boolean obrisan;
+	private boolean banovan;
+	public boolean isBanovan() {
+		return banovan;
+	}
+
+	public void setBanovan(boolean banovan) {
+		this.banovan = banovan;
+	}
+
 	public boolean isObrisan() {
 		return obrisan;
 	}

@@ -17,8 +17,11 @@ const PocetnaDostavljac = {template : '<pocetna-dostavljac></pocetna-dostavljac>
 const PorudzbineOdobravanje = {template : '<porudzbineZaOdobravanje></porudzbineZaOdobravanje>'}
 const KupacPorudzbine = {template : '<kupac-porudzbine></kupac-porudzbine>'}
 const KomentariMenadzer = {template : '<komentarMenadzer></komentarMenadzer>'}
-
-
+const ProfilKupac = {template : '<profil-kupac></profil-kupac>'}
+const ProfilMenadzer = {template : '<profil-menadzer></profil-menadzer>'}
+const IzmeniProfilKupac = {template : '<izmeni-profil-kupac></izmeni-profil-kupac>'}
+const IzmeniProfilMenadzer = {template : '<izmeni-profil-menadzer></izmeni-profil-menadzer>'}
+const IzmeniProfilAdmin = {template : '<izmeni-profil-admin></izmeni-profil-admin>'}
 
 
 
@@ -43,9 +46,12 @@ const router = new VueRouter({
 		{ path: '/pocetna/dostavljac', component: PocetnaDostavljac},
 		{ path: '/pocetna/menadzer/odobravanje', component: PorudzbineOdobravanje},
 		{ path: '/pocetna/porudzbine', component: KupacPorudzbine},
-		{ path: '/pocetna/menadzer/komentari', component: KomentariMenadzer}
-
-
+		{ path: '/pocetna/menadzer/komentari', component: KomentariMenadzer},
+		{ path: '/pocetna/kupac/profil', component: ProfilKupac},
+		{ path: '/pocetna/menadzer/profil', component: ProfilMenadzer},
+		{ path: '/pocetna/kupac/izmeni/profil', component: IzmeniProfilKupac},
+		{ path: '/pocetna/menadzer/izmeni/profil', component: IzmeniProfilMenadzer},
+		{ path: '/pocetna/admin/izmeni/profil', component: IzmeniProfilAdmin}
 	  ]
 });
 

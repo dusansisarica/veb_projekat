@@ -130,6 +130,20 @@ public class PorudzbineService {
 	}
 	
 	@POST
+	@Path("/otkaziPorudzbinu/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response otkaziPorudzbinu(@PathParam("id") String id, @Context HttpServletRequest request) {
+		if(PorudzbineDAO.otkaziPorudzbinu(id)) {
+			return Response.status(200).build();
+		}
+		else {
+			return Response.status(400).build();
+		}
+
+	}
+	
+	@POST
 	@Path("/cekaDostavljaca/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

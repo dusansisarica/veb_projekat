@@ -31,7 +31,7 @@ Vue.component("korpa", {
             </div>
             <p>Cena porudžbine je {{cena}}</p>
              <button class="btn btn-outline-success" v-on:click="kreirajPorudzbinu(korisnik.korisnik.idKorisnika)"  type="submit">Kreiraj porudzbinu</button>
-        </div>
+             </div>
         <div v-else>
             korpa je prazna
         </div>

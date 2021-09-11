@@ -46,7 +46,9 @@ Vue.component("kupac-porudzbine", {
                     <li class="list-group-item">Status : {{p.idNarudzbine.tipPorudzbine}}</li>
                     <li class="list-group-item">Cena : {{p.idNarudzbine.cena}}</li>
                     <button v-if="p.idNarudzbine.tipPorudzbine == 'dostavljena'" class="btn btn-outline-success" v-on:click="otvoriFormuZaKomentar(p.idNarudzbine.idPorudzbine)">Dodaj komentar i oceni restoran</button> 
-                </ul>
+                    <button v-if="p.idNarudzbine.tipPorudzbine == 'obrada'" class="btn btn-outline-success" v-on:click="otkaziPorudzbinu(p.idNarudzbine.idPorudzbine)"  type="submit">Otkaži porudzbinu</button>
+
+                    </ul>
                 <div>
                     <table v-if="p.idNarudzbine.idPorudzbine == komentarIndikator">
                         <tr><td>Unesite komentar: </td><td><textarea v-model="komentar.tekst" ></textarea></td></tr>
@@ -81,6 +83,9 @@ Vue.component("kupac-porudzbine", {
 
             axios.post(`rest/komentari/`, this.komentarZaSlanje);
             this.komentarIndikator = "nista";
+        },
+        otkaziPorudzbinu : function(id){
+            axios.post(`rest/porudzbine/otkaziPorudzbinu/${id}`);
         }
     }
 

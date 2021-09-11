@@ -28,6 +28,7 @@ Vue.component("pocetna-admin", {
                 <div>
                 <button class="btn btn-outline-success" v-on:click="profilAdministrator" type="submit">Moj profil</button>
                 </div>
+                <button class="btn btn-outline-success" v-on:click="izmeniProfil" type="submit">Izmeni profil</button>
                 <div>
                 <button class="btn btn-outline-success" v-on:click="dodajMenadzera" type="submit">Dodaj Menadzera</button>
                 </div>
@@ -52,6 +53,9 @@ Vue.component("pocetna-admin", {
     `,
 
     methods: {
+    	izmeniProfil : function(){
+            router.push('/pocetna/admin/izmeni/profil');
+        },
         profilAdministrator : function(){
             router.push('/pocetna/admin/profil');
         },

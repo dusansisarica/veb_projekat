@@ -9,7 +9,8 @@ Vue.component("prikazi-korisnike", {
             pretrazeniKorisnici : null,
             opcijaSortiranja : null,
             filterUloga : null,
-            filtriraniKorisnici : null
+            filtriraniKorisnici : null,
+            korisnikZaProveru : {korisnik : null, uloga : null}
         }
     },
 
@@ -142,7 +143,9 @@ Vue.component("prikazi-korisnike", {
         <div class="card-deck" style="display:inline-block;">
         <div class="card" v-for="value in filteredResources" style="width: 18rem; display:inline-block; margin:0.3%;">
             <ul class="list-group list-group-flush" >
-                <li class="list-group-item">Ime: {{value.korisnik.ime}}</li>
+                <li v-if="value.korisnik.banovan > 2" style="color:'red'" class="list-group-item">Ime: {{value.korisnik.ime}}</li>
+                <li v-else class="list-group-item">Ime: {{value.korisnik.ime}}</li>
+
                 <li class="list-group-item">Prezime: {{value.korisnik.prezime}}</li>
                 <li class="list-group-item">Datum rodjenja: {{value.korisnik.datumRodjenja}}</li>
                 <li class="list-group-item">Pol: {{value.korisnik.pol}}</li>
@@ -150,7 +153,8 @@ Vue.component("prikazi-korisnike", {
                 <li class="list-group-item">Obrisan: {{value.korisnik.obrisan}}</li>
             </ul>
             <button class="btn btn-outline-success" v-on:click="obrisi(value.korisnik.idKorisnika)" type="button" @submit.prevent="add()">Izbrisi korisnika</button>
-        </div>
+            <button class="btn btn-outline-success" v-on:click="banuj(value.korisnik.idKorisnika)" type="button" @submit.prevent="add()">Banuj korisnika</button>
+            </div>
         </div>
     </form>
     `,
@@ -178,7 +182,8 @@ Vue.component("prikazi-korisnike", {
             // then(response => (this.sviKorisnici = response.data));//, this.$router.go);
         },
         obrisi : function(id){
-            
+            axios.post(`rest/obrisiKorisnika/${id}`);
         }
+        
     }
 });

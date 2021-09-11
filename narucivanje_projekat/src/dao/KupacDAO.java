@@ -4,6 +4,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -12,6 +15,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import beans.Dostavljac;
 import beans.KorisnikRegistracija;
 import beans.Kupac;
 import beans.NormalanKupac;
@@ -44,6 +48,19 @@ public class KupacDAO {
 			e.printStackTrace();
 		}
 
+		Calendar c = new GregorianCalendar();
+		c.setTime(new Date(System.currentTimeMillis()));
+	    int dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+	    if (dayOfMonth == 1) {
+	    	List<Kupac> kupciSvi = new ArrayList<>();
+	    	for (Kupac k : sviKupci) {
+	    		k.setSumnjiviKupac(0);
+				kupci.put(k.getIdKorisnika(), k);
+				kupciSvi.add(k);
+			}
+	    	upisiKupce(kupciSvi);
+	    }
+		
 		for (Kupac k : sviKupci) {
 			kupci.put(k.getIdKorisnika(), k);
 		}		
@@ -113,6 +130,33 @@ public class KupacDAO {
 	public static Kupac nadjiKupca(String id) {
 		return kupci.get(id);
 	}
+	
+	public static void izmeniKupca(Kupac kupac) {
+		kupci.replace(kupac.getIdKorisnika(), kupac);
+		
+		List<Kupac> listaKupac = new ArrayList<Kupac>();
+		for(Kupac k : kupci.values()) {
+			listaKupac.add(k);
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), kupci);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
+	public static void upisiKupce(List<Kupac> kupciZaUpis) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), kupciZaUpis);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
 
 }

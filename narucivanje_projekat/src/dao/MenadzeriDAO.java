@@ -13,6 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import beans.Kupac;
 import beans.Menadzer;
 import dto.KorisnikUlogaDTO;
 import dto.RestoranLokacijaDTO;
@@ -117,6 +118,23 @@ public class MenadzeriDAO {
 		Menadzer menadzer = nadjiMenadzera(restoranLokacija.getMenadzerId());
 		menadzer.setRestoran(restoranLokacija.getRestoran().getId());
 		azurirajMenadzera(menadzer);
+	}
+	
+	public static void izmeniMenadzera(Menadzer menadzer) {
+		menadzeri.replace(menadzer.getIdKorisnika(), menadzer);
+		
+		List<Menadzer> listaMenadzer = new ArrayList<Menadzer>();
+		for(Menadzer m : menadzeri.values()) {
+			listaMenadzer.add(m);
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), menadzeri);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void upisiMenadzere(Collection<Menadzer> menadzeri) {

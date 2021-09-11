@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -13,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Admin;
 import beans.Kupac;
+import beans.Menadzer;
 import beans.NormalanKupac;
 import dto.KorisnikUlogaDTO;
 
@@ -48,6 +50,23 @@ public class AdminDAO {
 			admini.put(a.getIdKorisnika(), a);
 		}		
 
+	}
+	
+	public static void izmeniAdmina(Admin admin) {
+		admini.replace(admin.getIdKorisnika(), admin);
+		
+		List<Admin> listaAdmin = new ArrayList<Admin>();
+		for(Admin a : admini.values()) {
+			listaAdmin.add(a);
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), admini);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static Admin nadjiAdmina(String id) {

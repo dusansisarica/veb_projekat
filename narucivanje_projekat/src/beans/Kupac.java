@@ -15,6 +15,15 @@ public class Kupac extends Korisnik {
 	private List<Porudzbina> svePorudzbine = new ArrayList<Porudzbina>();
 	private Porudzbina korpa;
 	private double brojSakupljenihBodova;
+	private int sumnjiviKupac;
+
+	public int getSumnjiviKupac() {
+		return sumnjiviKupac;
+	}
+
+	public void setSumnjiviKupac(int sumnjiviKupac) {
+		this.sumnjiviKupac = sumnjiviKupac;
+	}
 
 	public Porudzbina getKorpa() {
 		return korpa;

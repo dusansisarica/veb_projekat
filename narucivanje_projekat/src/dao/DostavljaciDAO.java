@@ -121,6 +121,17 @@ public class DostavljaciDAO {
 		return true;
 	}
 
+	public static void upisiDostavljace(List<Dostavljac> dostavljaciZaUpis) {
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), dostavljaciZaUpis);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
 	
 	public static Dostavljac nadjiDostavljaca(String id) {
 		return dostavljaci.get(id);
