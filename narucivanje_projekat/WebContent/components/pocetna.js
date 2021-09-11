@@ -60,6 +60,14 @@ Vue.component("pocetna-strana", {
                         break;
                 }
                 if (this.filterTipRestorana){
+                    if (this.filterTipRestorana == "otvoren"){
+                        return this.filtriraniRestorani = this.pretrazeniRestorani.filter(restoran =>
+                            restoran.statusRestorana == true);
+                    }
+                    if (this.filterTipRestorana == "zatvoren"){
+                        return this.filtriraniRestorani = this.pretrazeniRestorani.filter(restoran =>
+                            restoran.statusRestorana == false);
+                    }
                     return this.filtriraniRestorani = this.pretrazeniRestorani.filter(restoran =>
                         restoran.tipRestorana.toLowerCase().includes(this.filterTipRestorana));
                 }
@@ -87,6 +95,14 @@ Vue.component("pocetna-strana", {
                         break;
                 }
                 if (this.filterTipRestorana){
+                    if (this.filterTipRestorana == "otvoren"){
+                        return this.filtriraniRestorani = this.restoran.filter(restoran =>
+                            restoran.statusRestorana);
+                    }
+                    if (this.filterTipRestorana == "zatvoren"){
+                        return this.filtriraniRestorani = this.restoran.filter(restoran =>
+                            !restoran.statusRestorana);
+                    }
                     return this.filtriraniRestorani = this.restoran.filter(restoran =>
                         restoran.tipRestorana.toLowerCase().includes(this.filterTipRestorana));
                 }
@@ -133,6 +149,10 @@ Vue.component("pocetna-strana", {
             <option value="italijanski">Italijanske restorane</option>
             <option value="kineski">Kineske restorane</option>
             <option value="rostilj">Roštilj restorane</option>
+            <option value="otvoren">Otvorene restorane</option>
+            <option value="zatvoren">Zatvorene restorane</option>
+
+
         </select>
 
         <button class="btn btn-outline-success" v-on:click="pretrazi" type="button" @submit.prevent="add()">Pretrazi</button>

@@ -5,7 +5,8 @@ Vue.component("kupac-porudzbine", {
             korisnikovePorudzbine : {artikalKolicina : [], idNarudzbine : null},
             komentarIndikator : "",
             komentar : {idKorisnika : null, idRestorana : null, tekst : null, ocena : null},
-            komentarZaSlanje : {idNarudzbine : null, komentar : null}
+            komentarZaSlanje : {idNarudzbine : null, komentar : null},
+            filterTipPorudzbine : ""
         }
     },
 
@@ -23,7 +24,17 @@ Vue.component("kupac-porudzbine", {
                 return true;
             }
             return false;
+        },
+        filteredResource(){
+            if (this.filterTipPorudzbine){
+                return this.filtriraniRestorani = this.korisnikovePorudzbine.filter(porudzbina =>
+                    porudzbina.idNarudzbine.tipPorudzbine.includes(this.filterTipPorudzbine));
+            }
+            else{
+                return this.korisnikovePorudzbine;
+            }
         }
+        
     },
 
     template: `
@@ -34,8 +45,23 @@ Vue.component("kupac-porudzbine", {
                 <label class="offset-md-0.2" style="color:white">Dobrodosli, {{korisnik.korisnik.ime}}</label>
             </div>
         </nav>
+
         <div style="margin:0.3%;">
-            <div v-for="p in this.korisnikovePorudzbine">
+        <select name="filter1" id="filter1">
+            <option value="" disabled selected>Prikazi samo:</option>
+            <option value="obrada">U obradi</option>
+            <option value="uPripremi">U pripremi</option>
+            <option value="cekaDostavljaca">Ceka dostavljaca</option>
+            <option value="uTransportu">U transportu</option>
+            <option value="dostavljena">Dostavljena</option>
+            <option value="otkazana">Otkazana</option>
+        </select>
+
+        <button class="btn btn-outline-success" v-on:click="pretrazi" type="button" @submit.prevent="add()">Pretrazi</button>
+        </div>
+
+        <div style="margin:0.3%;">
+            <div v-for="p in filteredResource">
                 <ol class="list-group list-group-numbered" style="width: 18rem; display:inline-block; margin:0.3%;" v-for="a in p.artikalKolicina" syle="width : 100px;">
                     <li class="list-group-item">Naziv artikla: {{a.artikal.naziv}}</li>
                     <li class="list-group-item">Količina artikla: {{a.cena}}</li>
@@ -86,6 +112,9 @@ Vue.component("kupac-porudzbine", {
         },
         otkaziPorudzbinu : function(id){
             axios.post(`rest/porudzbine/otkaziPorudzbinu/${id}`);
+        },
+        pretrazi : function(){
+            this.filterTipPorudzbine = document.getElementById("filter1").value;
         }
     }
 
