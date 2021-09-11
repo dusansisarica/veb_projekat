@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.Artikal;
+import beans.Kupac;
 import beans.Porudzbina;
 import dao.AdminDAO;
 import dao.ArtikliDAO;
@@ -24,6 +25,8 @@ import dao.KorisniciDAO;
 import dao.KupacDAO;
 import dao.MenadzeriDAO;
 import dao.PorudzbineDAO;
+import dto.ArtikalDTO;
+import dto.DostavljacDTO;
 import dto.KorisnikUlogaDTO;
 
 @Path("/artikli")
@@ -58,6 +61,22 @@ public class ArtikalService {
 			return Response.status(400).build();
 		}
 
+	}
+	
+	@GET
+	@Path("/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Artikal dobaviArtikalPoId(@PathParam("id") String id) {
+		return ArtikliDAO.dobaviArtikalPoId(id);
+	}
+	
+	@POST
+	@Path("/izmeniArtikal")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void izmeniArtikal(ArtikalDTO artikalDTO, @Context HttpServletRequest request) {
+		 ArtikliDAO.izmeniArtikal(artikalDTO);
 	}
 	
 }

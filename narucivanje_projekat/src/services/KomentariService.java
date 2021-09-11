@@ -83,6 +83,13 @@ public class KomentariService {
 	}
 	
 	@GET
+	@Path("/izracunajProsecnuOcenuRestorana/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public double izracunajProsecnuOcenuRestorana(@PathParam("id") String id) {
+		return KomentariDAO.izracunajProsecnuOcenuRestorana(id);
+	}
+	
+	@GET
 	@Path("/dobaviOdobreneKomentareZaRestoran/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Komentar> dobaviOdobreneKomentareZaRestoran(@PathParam("id") String id) {

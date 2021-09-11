@@ -130,7 +130,7 @@ public class MenadzeriDAO {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			objectMapper.writeValue(new FileOutputStream(putanja), menadzeri);
+			objectMapper.writeValue(new FileOutputStream(putanja), listaMenadzer);
 			
 		} catch (IOException e) {
 			e.printStackTrace();

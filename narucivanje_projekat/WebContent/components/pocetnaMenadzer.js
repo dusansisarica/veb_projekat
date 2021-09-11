@@ -65,7 +65,9 @@ Vue.component("pocetna-menadzer", {
                 <div class="card-body">
                     <button class="btn btn-outline-success" v-on:click="dodajArtikal(restoran.id)" type="submit">Dodaj artikal</button>
                 </div>
-                
+                <div class="card-body">
+                    <button class="btn btn-outline-success" v-on:click="pogledajArtikle(restoran.id)" type="submit">Pogledaj artikle</button>
+                </div>
                 <div class="card-body">
                     <button class="btn btn-outline-success" v-on:click="pogledajPorudzbine()" type="submit">Pogledaj porudžbine</button>
                 </div>
@@ -77,6 +79,9 @@ Vue.component("pocetna-menadzer", {
     `,
 
     methods: {
+     pogledajArtikle : function(id){
+              router.push(`/restorani/${id}`);
+        },
       izmeniProfil : function(){
             router.push('/pocetna/menadzer/izmeni/profil');
         },

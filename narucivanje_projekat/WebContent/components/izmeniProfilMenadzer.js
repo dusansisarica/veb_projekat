@@ -3,8 +3,7 @@ Vue.component("izmeni-profil-menadzer", {
         return {
           korisnik : {korisnik : null, uloga : null},
           korisnikRegistracija : {korisnickoIme : null},
-          kupacDTO : {idKorisnika : null, ime : null, prezime : null, datumRodjenja : null, korisnickoIme : null},
-          heh : "heh"
+          menadzerDTO : {idKorisnika : null, ime : null, prezime : null, datumRodjenja : null, korisnickoIme : null, lozinka : null},
         }
     },
 
@@ -49,6 +48,10 @@ Vue.component("izmeni-profil-menadzer", {
                     <td>Prezime:</td>
                     <td><input type="text"  v-model="korisnik.korisnik.prezime" name="prezime"></td>
                 </tr>
+                 <tr>
+                    <td>Lozinka:</td>
+                    <td><input type = "password"   v-model="korisnikRegistracija.lozinka"  name="lozinka"></td>
+                </tr>
                 <tr>
                     <td>Datum rođenja:</td>
                     <td>
@@ -66,14 +69,15 @@ Vue.component("izmeni-profil-menadzer", {
     `,
      methods : {
         izmeniProfil : function(){
-           this.kupacDTO.idKorisnika = this.korisnik.korisnik.idKorisnika;
-           this.kupacDTO.ime = this.korisnik.korisnik.ime;
-           this.kupacDTO.prezime = this.korisnik.korisnik.prezime;
-           this.kupacDTO.korisnickoIme = this.korisnikRegistracija.korisnickoIme;
-           this.kupacDTO.datumRodjenja = this.korisnik.korisnik.datumRodjenja;
+           this.menadzerDTO.idKorisnika = this.korisnik.korisnik.idKorisnika;
+           this.menadzerDTO.ime = this.korisnik.korisnik.ime;
+           this.menadzerDTO.prezime = this.korisnik.korisnik.prezime;
+           this.menadzerDTO.korisnickoIme = this.korisnikRegistracija.korisnickoIme;
+           this.menadzerDTO.datumRodjenja = this.korisnik.korisnik.datumRodjenja;
+           this.menadzerDTO.lozinka = this.korisnikRegistracija.lozinka;
            
            event.preventDefault();
-           axios.post('/narucivanje/rest/izmeniMenadzera', this.kupacDTO);
+           axios.post('/narucivanje/rest/izmeniMenadzera', this.menadzerDTO);
         }
      }
 });

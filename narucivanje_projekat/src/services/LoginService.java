@@ -31,9 +31,12 @@ import dao.KorisniciDAO;
 import dao.KupacDAO;
 import dao.MenadzeriDAO;
 import dao.PorudzbineDAO;
+import dto.AdminDTO;
+import dto.DostavljacDTO;
 import dto.KorisnikSaUlogom;
 import dto.KorisnikUlogaDTO;
 import dto.KupacDTO;
+import dto.MenadzerDTO;
 
 @Path("")
 public class LoginService {
@@ -62,7 +65,6 @@ public class LoginService {
 	    	String contextPath = ctx.getRealPath("");
 			ctx.setAttribute("porudzbineDAO", new PorudzbineDAO(contextPath));
 		}
-
 		if (ctx.getAttribute("kupciDAO") == null) {
 	    	String contextPath = ctx.getRealPath("");
 			ctx.setAttribute("kupciDAO", new KupacDAO(contextPath));
@@ -174,16 +176,24 @@ public class LoginService {
 	@Path("/izmeniMenadzera")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void izmeniMenadzera(KupacDTO kupacDto, @Context HttpServletRequest request) {
-		 KorisniciDAO.izmeniMenadzera(kupacDto);
+	public void izmeniMenadzera(MenadzerDTO menadzerDto, @Context HttpServletRequest request) {
+		 KorisniciDAO.izmeniMenadzera(menadzerDto);
 	}
 	
 	@POST
 	@Path("/izmeniAdmina")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void izmeniAdmina(KupacDTO kupacDto, @Context HttpServletRequest request) {
-		 KorisniciDAO.izmeniAdmina(kupacDto);
+	public void izmeniAdmina(AdminDTO adminDto, @Context HttpServletRequest request) {
+		 KorisniciDAO.izmeniAdmina(adminDto);
+	}
+	
+	@POST
+	@Path("/izmeniDostavljaca")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void izmeniDostavljaca(DostavljacDTO dostavljacDto, @Context HttpServletRequest request) {
+		 KorisniciDAO.izmeniDostavljaca(dostavljacDto);
 	}
 	
 	@GET
@@ -193,6 +203,7 @@ public class LoginService {
 	public List<KorisnikSaUlogom> dobaviSveKorisnike(@Context HttpServletRequest request) {
 		return KorisniciDAO.dobaviSveKorisnike();
 	}
+	
 	
 	@GET
 	@Path("/dobaviKupcaPoId/{id}")

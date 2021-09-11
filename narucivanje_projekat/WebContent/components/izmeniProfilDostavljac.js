@@ -1,9 +1,9 @@
-Vue.component("izmeni-profil-kupac", {
+Vue.component("izmeni-profil-dostavljac", {
     data: function () {
         return {
           korisnik : {korisnik : null, uloga : null},
           korisnikRegistracija : {korisnickoIme : null},
-          kupacDTO : {idKorisnika : null, ime : null, prezime : null, datumRodjenja : null, korisnickoIme : null, lozinka : null},
+          dostavljacDTO : {idKorisnika : null, ime : null, prezime : null, datumRodjenja : null, korisnickoIme : null, lozinka : null},
         }
     },
 
@@ -69,15 +69,15 @@ Vue.component("izmeni-profil-kupac", {
     `,
      methods : {
         izmeniProfil : function(){
-           this.kupacDTO.idKorisnika = this.korisnik.korisnik.idKorisnika;
-           this.kupacDTO.ime = this.korisnik.korisnik.ime;
-           this.kupacDTO.prezime = this.korisnik.korisnik.prezime;
-           this.kupacDTO.korisnickoIme = this.korisnikRegistracija.korisnickoIme;
-           this.kupacDTO.datumRodjenja = this.korisnik.korisnik.datumRodjenja;
-           this.kupacDTO.lozinka = this.korisnikRegistracija.lozinka;
+           this.dostavljacDTO.idKorisnika = this.korisnik.korisnik.idKorisnika;
+           this.dostavljacDTO.ime = this.korisnik.korisnik.ime;
+           this.dostavljacDTO.prezime = this.korisnik.korisnik.prezime;
+           this.dostavljacDTO.korisnickoIme = this.korisnikRegistracija.korisnickoIme;
+           this.dostavljacDTO.datumRodjenja = this.korisnik.korisnik.datumRodjenja;
+           this.dostavljacDTO.lozinka = this.korisnikRegistracija.lozinka;
            
            event.preventDefault();
-           axios.post('/narucivanje/rest/izmeniKupca', this.kupacDTO);
+           axios.post('/narucivanje/rest/izmeniDostavljaca', this.dostavljacDTO);
         }
      }
 });

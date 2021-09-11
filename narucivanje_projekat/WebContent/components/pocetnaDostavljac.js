@@ -29,6 +29,8 @@ Vue.component("pocetna-dostavljac", {
         <nav class="navbar navbar-light bg-dark">
                 <a class="navbar-brand" style="color:white" href="http://localhost:8080/narucivanje/#/">Početna</a> 
                 <div class="ml-auto ">
+                <button class="btn btn-outline-success" v-on:click="profilDostavljac" type="submit">Moj profil</button>
+                <button class="btn btn-outline-success" v-on:click="izmeniProfil" type="submit">Izmeni profil</button>
                     <label class="offset-md-0.2" style="color:white">Dobrodosli, {{korisnik.korisnik.ime}}</label>
                     <button class="btn btn-outline-success" type="submit" v-on:click="odjava" >Odjavite se</button>
                 </div>
@@ -67,6 +69,12 @@ Vue.component("pocetna-dostavljac", {
     `,
 
     methods: {
+    	izmeniProfil : function(){
+            router.push('/pocetna/dostavljac/izmeni/profil');
+        },
+      	profilDostavljac : function(){
+            router.push('/pocetna/dostavljac/profil');
+        },
         odjava : function(){
             axios.post(`rest/logout`).
             then(router.push('/'));

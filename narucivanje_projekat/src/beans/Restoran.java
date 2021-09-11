@@ -16,6 +16,7 @@ public class Restoran implements Serializable{
 	private boolean statusRestorana; //0-ne radi, 1-radi
 	private String logoRestorana;
 	private Lokacija lokacijaRestorana;
+	private double prosecnaOcena;
 	private List<Artikal> artikli = new ArrayList<Artikal>();
 
 	public Restoran() {
@@ -23,7 +24,7 @@ public class Restoran implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 	public Restoran(String naziv, TipRestorana tipRestorana, boolean statusRestorana, String logoRestorana,
-			Lokacija lokacijaRestorana, List<Artikal> artikli) {
+			Lokacija lokacijaRestorana, List<Artikal> artikli, double prosecnaOcena) {
 		super();
 		this.naziv = naziv;
 		this.tipRestorana = tipRestorana;
@@ -31,6 +32,7 @@ public class Restoran implements Serializable{
 		this.logoRestorana = logoRestorana;
 		this.lokacijaRestorana = lokacijaRestorana;
 		this.artikli = artikli;
+		this.setProsecnaOcena(prosecnaOcena);
 	}
 	public String getNaziv() {
 		return naziv;
@@ -73,6 +75,12 @@ public class Restoran implements Serializable{
 	}
 	public void setId(String id) {
 		this.id = id;
+	}
+	public double getProsecnaOcena() {
+		return prosecnaOcena;
+	}
+	public void setProsecnaOcena(double prosecnaOcena) {
+		this.prosecnaOcena = prosecnaOcena;
 	}
 	
 

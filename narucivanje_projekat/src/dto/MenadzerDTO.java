@@ -2,9 +2,7 @@ package dto;
 
 import java.util.Date;
 
-import beans.Artikal;
-
-public class KupacDTO {
+public class MenadzerDTO {
 	private String idKorisnika;
 	private String ime;
 	private String prezime;
@@ -12,7 +10,7 @@ public class KupacDTO {
 	private String korisnickoIme;
 	private String lozinka;
 	
-	public KupacDTO(String idKorisnika, String ime, String prezime, Date datumRodjenja, String korisnickoIme, String lozinka) {
+	public MenadzerDTO(String idKorisnika, String ime, String prezime, Date datumRodjenja, String korisnickoIme, String lozinka) {
 		super();
 		this.idKorisnika = idKorisnika;
 		this.ime = ime;
@@ -21,7 +19,7 @@ public class KupacDTO {
 		this.korisnickoIme = korisnickoIme;
 		this.setLozinka(lozinka);
 	}
-	public KupacDTO() {
+	public MenadzerDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

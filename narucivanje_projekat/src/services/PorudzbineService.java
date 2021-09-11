@@ -27,6 +27,7 @@ import dto.PorudzbinaDostavljacDTO;
 import dto.PorudzbinaDostavljacObjekatDTO;
 import dto.PorudzbinaSaStatusomDTO;
 import dto.PorudzbineDTO;
+import dto.PromenaArtiklaUPorudzbiniDTO;
 
 @Path("/porudzbine")
 public class PorudzbineService {
@@ -222,6 +223,34 @@ public class PorudzbineService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<PorudzbinaSaStatusomDTO> dobaviSvePorudzbineKupca(@PathParam("id") String id) {
 		return PorudzbineDAO.dobaviSvePorudzbineKupca(id);
+	}
+	
+	@POST
+	@Path("/promeniKolicinuArtikla")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response promeniKolicinuArtikla(PromenaArtiklaUPorudzbiniDTO id, @Context HttpServletRequest request) {
+		if(PorudzbineDAO.promeniKolicinuArtikla(id)) {
+			return Response.status(200).build();
+		}
+		else {
+			return Response.status(400).build();
+		}
+
+	}
+	
+	@POST
+	@Path("/ukloniArtikalIzKorpe")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response ukloniArtikalIzKorpe(PorudzbinaDostavljacDTO id, @Context HttpServletRequest request) {
+		if(PorudzbineDAO.ukloniArtikalIzKorpe(id)) {
+			return Response.status(200).build();
+		}
+		else {
+			return Response.status(400).build();
+		}
+
 	}
 	
 }

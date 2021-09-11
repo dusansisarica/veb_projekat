@@ -141,7 +141,7 @@ public class KupacDAO {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			objectMapper.writeValue(new FileOutputStream(putanja), kupci);
+			objectMapper.writeValue(new FileOutputStream(putanja), listaKupac);
 			
 		} catch (IOException e) {
 			e.printStackTrace();

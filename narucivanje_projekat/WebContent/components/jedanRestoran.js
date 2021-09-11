@@ -69,6 +69,8 @@ Vue.component("prikazi-restoran", {
                			 
                         <button class="btn btn-outline-success" v-on:click="naruciArtikal(artikal.idArtikla)"  type="submit">Naruči ovo</button>
                     </li>
+                    <button v-if="korisnik.uloga == 'menadzer'" class="btn btn-outline-success" v-on:click="izmeniArtikal(artikal.idArtikla)"  type="submit">Izmeni artikal</button>
+                    
                 </ul>
             </div>
             </div>
@@ -86,6 +88,9 @@ Vue.component("prikazi-restoran", {
 
     `,
      methods : {
+     	izmeniArtikal : function(id){
+            router.push(`/izmeni/artikal/${id}`);
+        },
         naruciArtikal : function(idArtikla){
             event.preventDefault();
             this.narudzbina.artikalId = idArtikla;

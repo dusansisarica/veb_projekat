@@ -14,6 +14,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Dostavljac;
 import beans.Komentar;
+import beans.Porudzbina;
+import beans.Restoran;
 import dto.KorisnikUlogaDTO;
 import dto.KupacRestoranDTO;
 
@@ -56,7 +58,8 @@ public class KomentariDAO {
 		
 		komentari.put(komentarZaUpis.getIdKomentara(), komentarZaUpis);
 		ArrayList<Komentar> sviKomentari = new ArrayList<Komentar>();
-		
+		Porudzbina p = PorudzbineDAO.dobaviPorudzbinu(komentar.getIdNarudzbine());
+		Restoran r = RestoraniDAO.dobaviRestoran(p.getIdRestoran());
 		for (Komentar d : komentari.values()) {
 			sviKomentari.add(d);
 		}
@@ -68,6 +71,8 @@ public class KomentariDAO {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		r.setProsecnaOcena(izracunajProsecnuOcenuRestorana(r.getId()));
+		RestoraniDAO.upisiOcenuURestoran(r);
 		return true;
 	}
 
@@ -91,6 +96,18 @@ public class KomentariDAO {
 		
 		return komentariZaRestoran;
 	}
+	
+	public static double izracunajProsecnuOcenuRestorana(String idRestorana) {
+			List<Komentar> komentari = dobaviKomentareZaRestoran(idRestorana);
+			double prosecnaOcena = 0;
+			for(Komentar k : komentari) {
+				prosecnaOcena = prosecnaOcena + k.getOcena();
+			}
+			return prosecnaOcena/komentari.size();
+		}
+	
+	
+		
 	
 	public static void kopirajIUpisiKomentar(Komentar k) {
 		komentari.replace(k.getIdKomentara(), k);

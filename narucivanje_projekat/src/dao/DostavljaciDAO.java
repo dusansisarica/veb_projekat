@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import beans.Admin;
 import beans.Dostavljac;
 import beans.Kupac;
 import beans.NormalanKupac;
@@ -135,6 +136,23 @@ public class DostavljaciDAO {
 	
 	public static Dostavljac nadjiDostavljaca(String id) {
 		return dostavljaci.get(id);
+	}
+	
+	public static void izmeniDostavljaca(Dostavljac dostavljac) {
+		dostavljaci.replace(dostavljac.getIdKorisnika(), dostavljac);
+		
+		List<Dostavljac> listaDostavljac = new ArrayList<Dostavljac>();
+		for(Dostavljac d : dostavljaci.values()) {
+			listaDostavljac.add(d);
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), listaDostavljac);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

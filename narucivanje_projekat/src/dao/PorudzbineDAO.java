@@ -32,6 +32,7 @@ import dto.PorudzbinaDostavljacDTO;
 import dto.PorudzbinaDostavljacObjekatDTO;
 import dto.PorudzbinaSaStatusomDTO;
 import dto.PorudzbineDTO;
+import dto.PromenaArtiklaUPorudzbiniDTO;
 
 public class PorudzbineDAO {
 	private static HashMap<String, Porudzbina> porudzbine = new HashMap<String, Porudzbina>();
@@ -66,7 +67,7 @@ public class PorudzbineDAO {
 
 	}
 	
-	public static boolean kreirajPorudzbinu(@PathParam("id") String id) {
+	public static boolean kreirajPorudzbinu(String id) {
 
 				
 		ArrayList<Porudzbina> svePorudzbine = new ArrayList<Porudzbina>();
@@ -74,11 +75,10 @@ public class PorudzbineDAO {
 			svePorudzbine.add(p);
 		}
 		Kupac kupac = KorisniciDAO.pronadjiKupcaPoId(id);
-		Artikal a = ArtikliDAO.dobaviArtikalPrekoId(kupac.getKorpa().getArtikli().keySet().stream().findFirst().get());
 		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 		Date date = new Date(System.currentTimeMillis());
 		
-		Porudzbina porudzbinaUpis = new Porudzbina(Long.toString(generisiId()), a.getRestoran(),
+		Porudzbina porudzbinaUpis = new Porudzbina(Long.toString(generisiId()), kupac.getKorpa().getIdRestoran(),
 													kupac.getKorpa().getArtikli(), kupac.getIdKorisnika(), date, 
 													kupac.getKorpa().getCena(),  TipPorudzbine.obrada );
 
@@ -388,6 +388,36 @@ public class PorudzbineDAO {
 		kupac.setSumnjiviKupac(kupac.getSumnjiviKupac() + 1);
 		KupacDAO.kopirajKupcaIUpisi(kupac);
 		kopirajPorudzbinuIUpisi(porudzbina);
+		return true;
+	}
+
+	public static boolean promeniKolicinuArtikla(PromenaArtiklaUPorudzbiniDTO pordzbinaKorisnik) {
+		if(pordzbinaKorisnik.getKolicina() <= 0) {
+			return false;
+		}
+		Kupac kupac = KupacDAO.nadjiKupca(pordzbinaKorisnik.getIdKorisnika());
+		Porudzbina porudzbina = kupac.getKorpa();
+		int cena = 0;
+		porudzbina.getArtikli().replace(pordzbinaKorisnik.getIdArtikla(), pordzbinaKorisnik.getKolicina());
+		for(String s : porudzbina.getArtikli().keySet()) {
+			cena += ArtikliDAO.dobaviArtikalPoId(s).getCena() * porudzbina.getArtikli().get(s);
+		}
+		porudzbina.setCena(cena);
+		kupac.setKorpa(porudzbina);
+		return true;
+	}
+
+	public static boolean ukloniArtikalIzKorpe(PorudzbinaDostavljacDTO pordzbinaKorisnik) {
+		Kupac kupac = KupacDAO.nadjiKupca(pordzbinaKorisnik.getIdDostavljaca());
+		Porudzbina porudzbina = kupac.getKorpa();
+
+		porudzbina.getArtikli().remove(pordzbinaKorisnik.getIdPorudzbine());
+		int cena = 0;
+		for(String s : porudzbina.getArtikli().keySet()) {
+			cena += ArtikliDAO.dobaviArtikalPoId(s).getCena() * porudzbina.getArtikli().get(s);
+		}
+		porudzbina.setCena(cena);
+		kupac.setKorpa(porudzbina);
 		return true;
 	}
 	
