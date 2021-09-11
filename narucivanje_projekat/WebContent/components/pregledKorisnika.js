@@ -143,8 +143,8 @@ Vue.component("prikazi-korisnike", {
         <div class="card-deck" style="display:inline-block;">
         <div class="card" v-for="value in filteredResources" style="width: 18rem; display:inline-block; margin:0.3%;">
             <ul class="list-group list-group-flush" >
-                <li v-if="value.korisnik.banovan > 2" style="color:'red'" class="list-group-item">Ime: {{value.korisnik.ime}}</li>
-                <li v-else class="list-group-item">Ime: {{value.korisnik.ime}}</li>
+                <li v-if=" value.korisnik.sumnjiviKupac > 3" style="color:red" class="list-group-item">Ime: {{value.korisnik.ime}}</li>
+                <li v-else class="list-group-item" >Ime: {{value.korisnik.ime}}</li>
 
                 <li class="list-group-item">Prezime: {{value.korisnik.prezime}}</li>
                 <li class="list-group-item">Datum rodjenja: {{value.korisnik.datumRodjenja}}</li>
