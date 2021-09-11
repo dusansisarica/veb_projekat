@@ -52,6 +52,12 @@ Vue.component("pocetna-strana", {
                     case "przOpadajuce":
                         this.pretrazeniRestorani.sort((a, b) => a.lokacijaRestorana.adresa.split(",")[1].toLowerCase() < b.lokacijaRestorana.adresa.split(",")[1].toLowerCase() ? 1 : -1);
                         break;
+                    case "ocenaRastuce":
+                        this.pretrazeniRestorani.sort((a, b) => a.prosecnaOcena > b.prosecnaOcena ? 1 : -1);
+                        break;
+                    case "ocenaOpadajuce":
+                        this.pretrazeniRestorani.sort((a, b) => a.prosecnaOcena < b.prosecnaOcena ? 1 : -1);
+                        break;
                 }
                 if (this.filterTipRestorana){
                     return this.filtriraniRestorani = this.pretrazeniRestorani.filter(restoran =>
@@ -72,6 +78,12 @@ Vue.component("pocetna-strana", {
                         break;
                     case "przOpadajuce":
                         this.restoran.sort((a, b) => a.lokacijaRestorana.adresa.split(",")[1].toLowerCase() < b.lokacijaRestorana.adresa.split(",")[1].toLowerCase() ? 1 : -1);
+                        break;
+                    case "ocenaRastuce":
+                        this.restoran.sort((a, b) => a.prosecnaOcena > b.prosecnaOcena ? 1 : -1);
+                        break;
+                    case "ocenaOpadajuce":
+                        this.restoran.sort((a, b) => a.prosecnaOcena < b.prosecnaOcena ? 1 : -1);
                         break;
                 }
                 if (this.filterTipRestorana){
@@ -113,6 +125,8 @@ Vue.component("pocetna-strana", {
             <option value="imeOpadajuce">Naziv restorana-opadajuće</option>
             <option value="przRastuce">Lokacija-rastuće</option>
             <option value="przOpadajuce">Lokacija-opadajuće</option>
+            <option value="ocenaRastuce">Ocena-rastuće</option>
+            <option value="ocenaOpadajuce">Ocena-opadajuće</option>
         </select>
         <select name="filter1" id="filter1">
             <option value="" disabled selected>Prikazi samo:</option>
