@@ -3,8 +3,7 @@ Vue.component("izmeni-profil-kupac", {
         return {
           korisnik : {korisnik : null, uloga : null},
           korisnikRegistracija : {korisnickoIme : null},
-          kupacDTO : {idKorisnika : null, ime : null, prezime : null, datumRodjenja : null, korisnickoIme : null},
-          heh : "heh"
+          kupacDTO : {idKorisnika : null, ime : null, prezime : null, datumRodjenja : null, korisnickoIme : null, lozinka : null},
         }
     },
 
@@ -49,6 +48,10 @@ Vue.component("izmeni-profil-kupac", {
                     <td>Prezime:</td>
                     <td><input type="text"  v-model="korisnik.korisnik.prezime" name="prezime"></td>
                 </tr>
+                 <tr>
+                    <td>Lozinka:</td>
+                    <td><input type="password"  v-model="korisnikRegistracija.lozinka" name="lozinka"></td>
+                </tr>
                 <tr>
                     <td>Datum rođenja:</td>
                     <td>
@@ -71,6 +74,7 @@ Vue.component("izmeni-profil-kupac", {
            this.kupacDTO.prezime = this.korisnik.korisnik.prezime;
            this.kupacDTO.korisnickoIme = this.korisnikRegistracija.korisnickoIme;
            this.kupacDTO.datumRodjenja = this.korisnik.korisnik.datumRodjenja;
+           this.kupacDTO.lozinka = this.korisnikRegistracija.lozinka;
            
            event.preventDefault();
            axios.post('/narucivanje/rest/izmeniKupca', this.kupacDTO);

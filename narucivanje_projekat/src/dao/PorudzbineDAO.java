@@ -18,12 +18,16 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Artikal;
+import beans.Dostavljac;
 import beans.Kupac;
 import beans.Menadzer;
 import beans.Porudzbina;
 import beans.TipPorudzbine;
 import dto.ArtikalKolicinaDTO;
 import dto.PorudzbinaDTO;
+import dto.PorudzbinaDostavljacDTO;
+import dto.PorudzbinaDostavljacObjekatDTO;
+import dto.PorudzbinaSaStatusomDTO;
 import dto.PorudzbineDTO;
 
 public class PorudzbineDAO {
@@ -73,8 +77,13 @@ public class PorudzbineDAO {
 		
 		Porudzbina porudzbinaUpis = new Porudzbina(Long.toString(generisiId()), a.getRestoran(),
 													kupac.getKorpa().getArtikli(), kupac.getIdKorisnika(), date, 
-													kupac.getKorpa().getCena(), TipPorudzbine.obrada );
+													kupac.getKorpa().getCena(),  TipPorudzbine.obrada );
 
+		porudzbinaUpis.setIdDostavljaca(null);
+		kupac.setBrojSakupljenihBodova(kupac.getBrojSakupljenihBodova() + (porudzbinaUpis.getCena()/1000 * 133));
+		kupac.setKorpa(null);
+		KupacDAO.kopirajKupcaIUpisi(kupac);
+		
 		svePorudzbine.add(porudzbinaUpis);
 		porudzbine.put(porudzbinaUpis.getIdPorudzbine(), porudzbinaUpis);
 
@@ -131,6 +140,14 @@ public class PorudzbineDAO {
 		Kupac kupac = KorisniciDAO.pronadjiKupcaPoId(porudzbineDto.getKorisnikId());
 		if (kupac.getKorpa() == null) {
 			kupac.setKorpa(new Porudzbina());
+		}
+		if (kupac.getKorpa().getIdRestoran() != null) {
+			if (!kupac.getKorpa().getIdRestoran().equals(ArtikliDAO.dobaviArtikalPrekoId(porudzbineDto.getArtikalId()).getRestoran())) {
+				kupac.setKorpa(new Porudzbina());
+			}
+		}
+		else {
+			kupac.getKorpa().setIdRestoran(ArtikliDAO.dobaviArtikalPrekoId(porudzbineDto.getArtikalId()).getRestoran());
 		}
 		Porudzbina porudzbina = kupac.getKorpa();
 		if (!porudzbina.getArtikli().containsKey(porudzbineDto.getArtikalId())) {
@@ -211,4 +228,138 @@ public class PorudzbineDAO {
 		kopirajPorudzbinuIUpisi(porudzbinaUpis);
 		return true;
 	}
+
+	public static List<PorudzbinaDTO> dobaviPorudzbineBezDostavljaca() {
+		List<PorudzbinaDTO> porudzbineZaDostavljaca = new ArrayList<>();
+		for (Porudzbina p : porudzbine.values()) {
+			List<ArtikalKolicinaDTO> artikliUPorudzbini = new ArrayList<>();
+			if (p.getTipPorudzbine() == TipPorudzbine.cekaDostavljaca) {
+				for (String a : p.getArtikli().keySet()) {
+					artikliUPorudzbini.add(new ArtikalKolicinaDTO(ArtikliDAO.dobaviArtikalPrekoId(a), p.getArtikli().get(a)));
+				}
+				porudzbineZaDostavljaca.add(new PorudzbinaDTO(artikliUPorudzbini, p.getIdPorudzbine()));
+			}
+		}
+		return porudzbineZaDostavljaca;
+	}
+
+	public static boolean posaljiZahtevMenadzeru(PorudzbinaDostavljacDTO dto) {
+		Porudzbina porudzbina = dobaviPorudzbinu(dto.getIdPorudzbine());
+		List<String> dostavljaci;
+		if (porudzbina.getZainteresovaniDostavljaci().size() == 0) {
+			dostavljaci = new ArrayList<>();
+		}
+		else {
+			dostavljaci = porudzbina.getZainteresovaniDostavljaci();
+		}
+		dostavljaci.add(dto.getIdDostavljaca());
+		porudzbina.setZainteresovaniDostavljaci(dostavljaci);
+		kopirajPorudzbinuIUpisi(porudzbina);
+		return true;
+	}
+
+	public static List<PorudzbinaDostavljacObjekatDTO> dobaviSvePorudzbineZaOdobrenjeDostavljaca(String id) {
+		List<Porudzbina> porudzbineSve = porudzbineSaZainteresovanimDostavljacima(id);
+		List<PorudzbinaDostavljacObjekatDTO> por = new ArrayList<>();
+		for (Porudzbina p : porudzbineSve) {
+			List<Dostavljac> dostavljaci = new ArrayList<>();
+			for (String idD : p.getZainteresovaniDostavljaci()) {
+				dostavljaci.add(DostavljaciDAO.nadjiDostavljaca(idD));
+			}
+			por.add(new PorudzbinaDostavljacObjekatDTO(dostavljaci, p));
+		}
+		return por;
+	}
+	
+	public static List<Porudzbina> porudzbineSaZainteresovanimDostavljacima(String id) {
+		List<Porudzbina> porudzbineSve = new ArrayList<>();
+		for (Porudzbina p : porudzbine.values()) {
+			if (p.getZainteresovaniDostavljaci().size() > 0 && p.getIdRestoran().equals(id)) {
+				porudzbineSve.add(p);
+			}
+		}
+		
+		return porudzbineSve;
+	}
+
+	public static boolean odobriPorudzbinuDostavljacu(PorudzbinaDostavljacDTO dto) {
+		Porudzbina porudzbina = dobaviPorudzbinu(dto.getIdPorudzbine());
+		porudzbina.setIdDostavljaca(dto.getIdDostavljaca());
+		porudzbina.setTipPorudzbine(TipPorudzbine.uTransportu);
+		porudzbina.setZainteresovaniDostavljaci(new ArrayList<>());
+		porudzbine.replace(porudzbina.getIdPorudzbine(), porudzbina);
+		List<Porudzbina> svePorudzbine = new ArrayList<>();
+		for (Porudzbina p : porudzbine.values()) {
+			svePorudzbine.add(p);
+		}
+		Dostavljac dostavljac = KorisniciDAO.pronadjiDostavljacaPoId(dto.getIdDostavljaca());
+		dostavljac.getPorudzbineZaDostavljanje().add(porudzbina);
+		DostavljaciDAO.kopirajIupisiDostavljaca(dostavljac);
+		upisiPorudzbine(svePorudzbine);
+		return true;
+	}
+
+	public static List<PorudzbinaDTO> dobaviPorudzbineZaKojeJeZaduzenDostavljac(String id) {
+		Dostavljac dostavljac = KorisniciDAO.pronadjiDostavljacaPoId(id);
+		List<PorudzbinaDTO> dostavljacevePorudzbine = new ArrayList<>();
+		for (Porudzbina n : dostavljac.getPorudzbineZaDostavljanje()) {
+			List<ArtikalKolicinaDTO> artikalKolicina = new ArrayList<>();
+			for (String s : n.getArtikli().keySet()) {
+				artikalKolicina.add(new ArtikalKolicinaDTO(ArtikliDAO.dobaviArtikalPrekoId(s), n.getArtikli().get(s)));
+			}
+			dostavljacevePorudzbine.add(new PorudzbinaDTO(artikalKolicina, n.getIdPorudzbine()));
+		}
+		return dostavljacevePorudzbine;
+	}
+
+	public static boolean dostavljenaPorudzbina(PorudzbinaDostavljacDTO dto) {
+		Porudzbina porudzbina = dobaviPorudzbinu(dto.getIdPorudzbine());
+		Dostavljac dostavljac = KorisniciDAO.pronadjiDostavljacaPoId(dto.getIdDostavljaca());
+		List<Porudzbina> porudzbine1 = new ArrayList<>();
+
+		for (Porudzbina p : dostavljac.getPorudzbineZaDostavljanje()) {
+			porudzbine1.add(p);
+		}
+		
+		for (Porudzbina p : dostavljac.getPorudzbineZaDostavljanje()) {
+			if (p.getIdPorudzbine().equals(porudzbina.getIdPorudzbine())) {
+				porudzbine1.remove(p);
+			}
+		}
+		dostavljac.setPorudzbineZaDostavljanje(porudzbine1);
+		//dostavljac.getPorudzbineZaDostavljanje().remove(porudzbina);
+		porudzbina.setTipPorudzbine(TipPorudzbine.dostavljena);
+		DostavljaciDAO.kopirajIupisiDostavljaca(dostavljac);
+		kopirajPorudzbinuIUpisi(porudzbina);
+		return true;
+	}
+	
+	public static List<Porudzbina> dobaviSvePorudzbine(){
+		List<Porudzbina> svePorudzbine = new ArrayList<>();
+		for (Porudzbina p : porudzbine.values()) {
+			svePorudzbine.add(p);
+		}
+		return svePorudzbine;
+	}
+
+	public static List<PorudzbinaSaStatusomDTO> dobaviSvePorudzbineKupca(String id) {
+		List<Porudzbina> svePorudzbine = dobaviSvePorudzbine();
+		List<PorudzbinaSaStatusomDTO> kupcevePorudzbine = new ArrayList<>();
+		for (Porudzbina p : svePorudzbine) {
+			if (p.getIdKupac().equals(id)) {
+				List<ArtikalKolicinaDTO> artikliKolicina = new ArrayList<>();
+				for (String s : p.getArtikli().keySet()) {
+					artikliKolicina.add(new ArtikalKolicinaDTO(ArtikliDAO.dobaviArtikalPrekoId(s), p.getArtikli().get(s)));
+				}
+				kupcevePorudzbine.add(new PorudzbinaSaStatusomDTO(artikliKolicina, p));
+			}
+		}
+		return kupcevePorudzbine;
+	}
+	
+
+
+	
+
+
 }

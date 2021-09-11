@@ -13,8 +13,17 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import beans.Admin;
 import beans.Artikal;
+import beans.Dostavljac;
+import beans.KorisnikRegistracija;
+import beans.Kupac;
 import beans.Menadzer;
+import beans.Porudzbina;
+import beans.Restoran;
+import dto.ArtikalDTO;
+import dto.DostavljacDTO;
+import dto.KorisnikSaUlogom;
 import dto.KorisnikUlogaDTO;
 import dto.RestoranLokacijaDTO;
 
@@ -51,6 +60,14 @@ public class ArtikliDAO {
 
 	}
 	
+	
+	
+	public static Artikal dobaviArtikalPoId(String id) {
+		return artikli.get(id);
+	}
+	
+	
+	
 	public static boolean upisiArtikal(Artikal artikal) {
 
 		Artikal artikalUpis = new Artikal(artikal.getNaziv(), artikal.getCena(), artikal.getTipArtikla(),
@@ -64,10 +81,11 @@ public class ArtikliDAO {
 		if(artikal.getCena() == 0.0) {
 			return false;
 		}
-		if(artikal.getKolicina() == 0.0) {
+		if(artikal.getTipArtikla() == null) {
 			return false;
 		}
-		if(artikal.getOpis() == null || artikal.getOpis() == "") {
+	
+		if(artikal.getSlikaArtikla() == "") {
 			return false;
 		}
 		
@@ -93,6 +111,44 @@ public class ArtikliDAO {
 	
 	public static Artikal dobaviArtikalPrekoId(String idArtikla) {
 		return artikli.get(idArtikla);
+	}
+	
+	public static void izmeniArtikal(ArtikalDTO artikalDto) {
+		Artikal artikal = new Artikal();
+		for(Artikal a : artikli.values()) {
+			if(a.getIdArtikla().equals(artikalDto.getId())) {
+				artikal = a;
+			}
+		}
+		artikal.setCena(artikalDto.getCena());
+		artikal.setKolicina(artikalDto.getKolicina());
+		artikal.setNaziv(artikalDto.getNaziv());
+		artikal.setOpis(artikalDto.getOpis());
+		if(artikalDto.getSlikaArtikla() != null) {
+			artikal.setSlikaArtikla(artikalDto.getSlikaArtikla());
+		}
+		if(artikalDto.getTipArtikla() != null) {
+			artikal.setTipArtikla(artikalDto.getTipArtikla());
+		}
+
+
+		artikli.replace(artikalDto.getId(), artikal);
+		
+		List<Artikal> artikliList = new ArrayList<Artikal>();
+		for(Artikal a : artikli.values()) {
+			artikliList.add(a);
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), artikliList);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Restoran r = RestoraniDAO.dobaviRestoran(artikal.getRestoran());
+		RestoraniDAO.zameniArtikalRestoranu(artikal.getRestoran(), artikal);
+		
 	}
 	
 }

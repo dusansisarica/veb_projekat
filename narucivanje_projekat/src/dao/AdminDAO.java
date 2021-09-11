@@ -62,7 +62,7 @@ public class AdminDAO {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			objectMapper.writeValue(new FileOutputStream(putanja), admini);
+			objectMapper.writeValue(new FileOutputStream(putanja), listaAdmin);
 			
 		} catch (IOException e) {
 			e.printStackTrace();

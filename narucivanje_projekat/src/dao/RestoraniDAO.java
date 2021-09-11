@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import beans.Artikal;
 import beans.Korisnik;
 import beans.Lokacija;
+import beans.Menadzer;
 import beans.Restoran;
 import beans.TipRestorana;
 import dto.RestoranLokacijaDTO;
@@ -63,10 +64,28 @@ public class RestoraniDAO {
 		Restoran restoran = restoranLokacija.getRestoran();
 		restoran.setLokacijaRestorana(restoranLokacija.getLokacija());
 		restoran.setId(Integer.toString(restorani.size()+1));
+		restoran.setProsecnaOcena(0);
 		MenadzeriDAO.postaviMenadzeruRestoran(restoranLokacija);
 
 		restorani.put(restoran.getId(), restoran);
 		upisiRestorane(restorani);
+	}
+	
+	public static void upisiOcenuURestoran(Restoran restoran) {
+		restorani.replace(restoran.getId(), restoran);
+		
+		List<Restoran> listaRestoran = new ArrayList<Restoran>();
+		for(Restoran r : restorani.values()) {
+			listaRestoran.add(r);
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), listaRestoran);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 
@@ -112,6 +131,23 @@ public class RestoraniDAO {
 		artikli.add(artikal);
 		restoran.setArtikli(artikli);
 		restorani.replace(id, restoran);
+		upisiRestorane(restorani);
+	}
+	
+	public static void zameniArtikalRestoranu(String id, Artikal artikal) {
+		Restoran restoran = restorani.get(id);
+		List<Artikal> artikli = restoran.getArtikli();
+		for (Artikal a : artikli) {
+			if(a.getIdArtikla().equals(artikal.getIdArtikla())) {
+				a.setCena(artikal.getCena());
+				a.setKolicina(artikal.getKolicina());
+				a.setNaziv(artikal.getNaziv());
+				a.setOpis(artikal.getOpis());
+				a.setTipArtikla(artikal.getTipArtikla());
+				a.setSlikaArtikla(artikal.getSlikaArtikla());
+			}
+		}
+		restorani.replace(restoran.getId(), restoran);
 		upisiRestorane(restorani);
 	}
 }

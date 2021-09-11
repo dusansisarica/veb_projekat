@@ -84,6 +84,32 @@ public class KupacDAO {
 		return true;
 	}
 	
+	public static void kopirajKupcaIUpisi(Kupac kupac) {
+		List<Kupac> sviKupci = new ArrayList<>();
+		for (Kupac k : kupci.values()) {
+			sviKupci.add(k);
+		}
+		for (Kupac k : sviKupci) {
+			if (k.getIdKorisnika().equals(kupac.getIdKorisnika())) {
+				kupci.replace(k.getIdKorisnika(), kupac);
+			}
+		}
+		List<Kupac> sviKupciUpis = new ArrayList<>();
+
+		for (Kupac k : kupci.values()) {
+			sviKupciUpis.add(k);
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), sviKupciUpis);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
 	public static Kupac nadjiKupca(String id) {
 		return kupci.get(id);
 	}
@@ -98,7 +124,7 @@ public class KupacDAO {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			objectMapper.writeValue(new FileOutputStream(putanja), kupci);
+			objectMapper.writeValue(new FileOutputStream(putanja), listaKupac);
 			
 		} catch (IOException e) {
 			e.printStackTrace();

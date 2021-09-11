@@ -1,7 +1,7 @@
 Vue.component("pocetna-strana", {
     data: function(){
         return {
-            restoran: {naziv : null, tipRestorana : null, statusRestorana : null, logoRestorana : null},
+            restoran: {naziv : null, tipRestorana : null, statusRestorana : null, logoRestorana : null, prosecnaOcena : null},
             parametarPretrageNaziv : "",
             pretrazeniRestorani : null,
             parametarPretrageGrad : "",
@@ -98,6 +98,7 @@ Vue.component("pocetna-strana", {
                 <button class="btn btn-outline-success" v-on:click="korpa" type="submit">Korpa</button> 
                 <button class="btn btn-outline-success" v-on:click="profilKupac" type="submit">Moj profil</button>
                 <button class="btn btn-outline-success" v-on:click="izmeniProfil" type="submit">Izmeni profil</button>
+                <button class="btn btn-outline-success" v-on:click="porudzbine" type="submit">Pogledaj porudžbine</button> 
                 <label class="offset-md-0.2" style="color:white">Dobrodosli, {{korisnik.korisnik.ime}}</label>
                 <button class="btn btn-outline-success" type="submit" v-on:click="odjava">Odjavite se</button>
             </div>
@@ -129,6 +130,7 @@ Vue.component("pocetna-strana", {
                     <li class="list-group-item">{{r.tipRestorana}}</li>
                     <li class="list-group-item">{{r.statusRestorana}}</li>
                     <li class="list-group-item">{{r.lokacijaRestorana.adresa}}</li>
+                    <li class="list-group-item">{{r.prosecnaOcena}}</li>
                 </ul>
                 <div class="card-body">
                     <button class="btn btn-outline-success" v-on:click="pogledajRestoran(r.id)" type="submit">Pogledaj ponudu</button>
@@ -164,8 +166,11 @@ Vue.component("pocetna-strana", {
             axios.post(`rest/logout`).
             then(this.$forceUpdate());
         },
-        korpa: function(){
+        korpa : function(){
         	 router.push(`pocetna/korpa`);
+        },
+        porudzbine : function(){
+            router.push(`pocetna/porudzbine`);
         }
     }
 

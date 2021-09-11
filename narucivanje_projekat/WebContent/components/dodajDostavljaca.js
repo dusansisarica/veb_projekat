@@ -64,7 +64,7 @@ Vue.component("dodaj-dostavljaca", {
             event.preventDefault();
             this.korisnikPomocna.korisnik = this.korisnik;
             this.korisnikPomocna.korisnikRegistracija = this.korisnikRegistracija;
-            axios.post('/narucivanje/rest/dostavljaci', this.korisnikPomocna).
+            axios.post('/narucivanje/rest/registracija', this.korisnikPomocna).
             then(response => router.push(`/pocetna/admin`));
         },
         onChange : function(event){

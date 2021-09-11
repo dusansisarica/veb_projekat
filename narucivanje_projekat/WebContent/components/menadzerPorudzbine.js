@@ -33,12 +33,16 @@ Vue.component("porudzbine-menadzer", {
                 </div>
             </div>
         </nav>
+        <div>
+        <button class="btn btn-outline-success" type="submit" v-on:click="odobriPorudzbinuDostavljacu">Odobri dostavljaču porudžbinu</button>
+        </div>
+
         <div v-for="narudzbina in this.porudzbine">
         <div>
             <ol class="list-group list-group-numbered" style="width: 18rem; display:inline-block; margin:0.3%;" v-for="porudzbina in narudzbina.artikalKolicina" syle="width : 100px;">
                 <li class="list-group-item">{{porudzbina.artikal.naziv}}</li>
                 <li class="list-group-item">{{porudzbina.artikal.cena}}</li>
-                <li class="list-group-item">{{porudzbina.kolicina}}</li>
+                <li class="list-group-item">{{porudzbina.cena}}</li>
             </ol>
         </div>
             <button class="btn btn-outline-success" type="submit" v-on:click="odobriPorudzbinu(narudzbina.idNarudzbine)">Odobri porudžbinu</button>
@@ -53,6 +57,9 @@ Vue.component("porudzbine-menadzer", {
       },
       cekaDostavljaca : function(id){
         axios.post(`/narucivanje/rest/porudzbine/cekaDostavljaca/${id}`);
-    }
+      },
+      odobriPorudzbinuDostavljacu : function(){
+        router.push(`/pocetna/menadzer/odobravanje`);
+      }
     }
 });

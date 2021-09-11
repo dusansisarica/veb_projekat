@@ -22,14 +22,19 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import beans.Admin;
+import beans.Dostavljac;
 import beans.Korisnik;
 import beans.KorisnikRegistracija;
 import beans.Kupac;
 import beans.Menadzer;
 import beans.NormalanKupac;
+import beans.Porudzbina;
+import dto.AdminDTO;
+import dto.DostavljacDTO;
 import dto.KorisnikSaUlogom;
 import dto.KorisnikUlogaDTO;
 import dto.KupacDTO;
+import dto.MenadzerDTO;
 
 
 public class KorisniciDAO {
@@ -83,15 +88,46 @@ public class KorisniciDAO {
 		
 	}
 	
-	public static void izmeniMenadzera(KupacDTO kupacDto) {
+	public static void izmeniDostavljaca(DostavljacDTO dostavljacDto) {
 		KorisnikRegistracija korisnikRegistracija = new KorisnikRegistracija();
 		for(KorisnikRegistracija kr : korisnici.values()) {
-			if(kr.getId().equals(kupacDto.getIdKorisnika())) {
+			if(kr.getId().equals(dostavljacDto.getIdKorisnika())) {
 				korisnikRegistracija = kr;
 			}
 		}
-		korisnikRegistracija.setKorisnickoIme(kupacDto.getKorisnickoIme());
-		korisnici.replace(kupacDto.getIdKorisnika(), korisnikRegistracija);
+		korisnikRegistracija.setKorisnickoIme(dostavljacDto.getKorisnickoIme());
+		korisnici.replace(dostavljacDto.getIdKorisnika(), korisnikRegistracija);
+		
+		List<KorisnikRegistracija> korisniciRegistracija = new ArrayList<KorisnikRegistracija>();
+		for(KorisnikRegistracija kr : korisnici.values()) {
+			korisniciRegistracija.add(kr);
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), korisniciRegistracija);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Dostavljac dostavljac = DostavljaciDAO.nadjiDostavljaca(korisnikRegistracija.getId());
+		dostavljac.setIme(dostavljacDto.getIme());
+		dostavljac.setPrezime(dostavljacDto.getPrezime());
+		dostavljac.setDatumRodjenja(dostavljacDto.getDatumRodjenja());
+		DostavljaciDAO.izmeniDostavljaca(dostavljac);
+		
+	}
+	
+	public static void izmeniMenadzera(MenadzerDTO menadzerDto) {
+		KorisnikRegistracija korisnikRegistracija = new KorisnikRegistracija();
+		for(KorisnikRegistracija kr : korisnici.values()) {
+			if(kr.getId().equals(menadzerDto.getIdKorisnika())) {
+				korisnikRegistracija = kr;
+			}
+		}
+		korisnikRegistracija.setKorisnickoIme(menadzerDto.getKorisnickoIme());
+		korisnici.replace(menadzerDto.getIdKorisnika(), korisnikRegistracija);
 		
 		List<KorisnikRegistracija> korisniciRegistracija = new ArrayList<KorisnikRegistracija>();
 		for(KorisnikRegistracija kr : korisnici.values()) {
@@ -107,22 +143,22 @@ public class KorisniciDAO {
 		}
 		
 		Menadzer menadzer = MenadzeriDAO.nadjiMenadzera(korisnikRegistracija.getId());
-		menadzer.setIme(kupacDto.getIme());
-		menadzer.setPrezime(kupacDto.getPrezime());
-		menadzer.setDatumRodjenja(kupacDto.getDatumRodjenja());
+		menadzer.setIme(menadzerDto.getIme());
+		menadzer.setPrezime(menadzerDto.getPrezime());
+		menadzer.setDatumRodjenja(menadzerDto.getDatumRodjenja());
 		MenadzeriDAO.izmeniMenadzera(menadzer);
 		
 	}
 	
-	public static void izmeniAdmina(KupacDTO kupacDto) {
+	public static void izmeniAdmina(AdminDTO adminDto) {
 		KorisnikRegistracija korisnikRegistracija = new KorisnikRegistracija();
 		for(KorisnikRegistracija kr : korisnici.values()) {
-			if(kr.getId().equals(kupacDto.getIdKorisnika())) {
+			if(kr.getId().equals(adminDto.getIdKorisnika())) {
 				korisnikRegistracija = kr;
 			}
 		}
-		korisnikRegistracija.setKorisnickoIme(kupacDto.getKorisnickoIme());
-		korisnici.replace(kupacDto.getIdKorisnika(), korisnikRegistracija);
+		korisnikRegistracija.setKorisnickoIme(adminDto.getKorisnickoIme());
+		korisnici.replace(adminDto.getIdKorisnika(), korisnikRegistracija);
 		
 		List<KorisnikRegistracija> korisniciRegistracija = new ArrayList<KorisnikRegistracija>();
 		for(KorisnikRegistracija kr : korisnici.values()) {
@@ -138,9 +174,9 @@ public class KorisniciDAO {
 		}
 		
 		Admin admin = AdminDAO.nadjiAdmina(korisnikRegistracija.getId());
-		admin.setIme(kupacDto.getIme());
-		admin.setPrezime(kupacDto.getPrezime());
-		admin.setDatumRodjenja(kupacDto.getDatumRodjenja());
+		admin.setIme(adminDto.getIme());
+		admin.setPrezime(adminDto.getPrezime());
+		admin.setDatumRodjenja(adminDto.getDatumRodjenja());
 		AdminDAO.izmeniAdmina(admin);
 		
 	}
@@ -194,6 +230,7 @@ public class KorisniciDAO {
 			return false;
 		}
 		
+		korisnik.getKorisnik().setObrisan(false);
 		korisnik.getKorisnikRegistracija().setId(Integer.toString(korisnici.size()));
 		ArrayList<KorisnikRegistracija> sviKorisnici = new ArrayList<KorisnikRegistracija>();
 		for (KorisnikRegistracija k : korisnici.values()) {
@@ -264,6 +301,7 @@ public class KorisniciDAO {
 			else if(kr.getUloga().equals("admin")) {
 				sviKorisnici.add(new KorisnikSaUlogom(AdminDAO.nadjiAdmina(kr.getId()), "admin"));
 			}
+
 		}
 		return sviKorisnici;
 	}
@@ -284,10 +322,12 @@ public class KorisniciDAO {
 		for (KorisnikSaUlogom ksu : sviKorisnici) {
 			if(ksu.getKorisnik() != null) {
 				if (ksu.getKorisnik().getIdKorisnika() == id) {
-					return ksu.getUloga();
+					if (ksu.getKorisnik().getIdKorisnika().equals(id)) {
+						return ksu.getUloga();
+					}
 				}
-
 			}
+			
 		}
 		return null;
 	}
@@ -331,6 +371,41 @@ public class KorisniciDAO {
 		}
 		return null;
 	}
+	
+	public static List<Dostavljac> dobaviSveDostavljace(){
+		List<Dostavljac> dostavljaci = new ArrayList<Dostavljac>();
+		for (KorisnikSaUlogom krg : dobaviSveKorisnike()) {
+			if (krg.getUloga() == "dostavljac") {
+				dostavljaci.add((Dostavljac)krg.getKorisnik());
+			}
+		}
+		return dostavljaci;
+	}
+
+	public static Dostavljac pronadjiDostavljacaPoId(String idDostavljaca) {
+		List<Dostavljac> dostavljaci = dobaviSveDostavljace();
+		for(Dostavljac dostavljac : dostavljaci) {
+			if (dostavljac.getIdKorisnika().equals(idDostavljaca)) {
+				return dostavljac;
+			}
+		}
+		return null;
+	}
+	
+	public static void upisiKorisnike() {
+		List<KorisnikRegistracija> sviKorisnici = new ArrayList<>();
+		
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		try {
+			objectMapper.writeValue(new FileOutputStream(putanja), sviKorisnici);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
 
 
 

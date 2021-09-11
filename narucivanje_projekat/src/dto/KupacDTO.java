@@ -10,14 +10,16 @@ public class KupacDTO {
 	private String prezime;
 	private Date datumRodjenja;
 	private String korisnickoIme;
+	private String lozinka;
 	
-	public KupacDTO(String idKorisnika, String ime, String prezime, Date datumRodjenja, String korisnickoIme) {
+	public KupacDTO(String idKorisnika, String ime, String prezime, Date datumRodjenja, String korisnickoIme, String lozinka) {
 		super();
 		this.idKorisnika = idKorisnika;
 		this.ime = ime;
 		this.prezime = prezime;
 		this.datumRodjenja = datumRodjenja;
 		this.korisnickoIme = korisnickoIme;
+		this.setLozinka(lozinka);
 	}
 	public KupacDTO() {
 		super();
@@ -53,6 +55,12 @@ public class KupacDTO {
 	}
 	public void setKorisnickoIme(String korisnickoIme) {
 		this.korisnickoIme = korisnickoIme;
+	}
+	public String getLozinka() {
+		return lozinka;
+	}
+	public void setLozinka(String lozinka) {
+		this.lozinka = lozinka;
 	}
 	
 }

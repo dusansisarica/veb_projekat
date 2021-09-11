@@ -65,15 +65,23 @@ Vue.component("pocetna-menadzer", {
                 <div class="card-body">
                     <button class="btn btn-outline-success" v-on:click="dodajArtikal(restoran.id)" type="submit">Dodaj artikal</button>
                 </div>
-                
+                <div class="card-body">
+                    <button class="btn btn-outline-success" v-on:click="pogledajArtikle(restoran.id)" type="submit">Pogledaj artikle</button>
+                </div>
                 <div class="card-body">
                     <button class="btn btn-outline-success" v-on:click="pogledajPorudzbine()" type="submit">Pogledaj porudžbine</button>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-outline-success" v-on:click="pogledajKomentare()" type="submit">Pogledaj komentare</button>
                 </div>
         </div>
     </form>
     `,
 
     methods: {
+     pogledajArtikle : function(id){
+              router.push(`/restorani/${id}`);
+        },
       izmeniProfil : function(){
             router.push('/pocetna/menadzer/izmeni/profil');
         },
@@ -85,6 +93,9 @@ Vue.component("pocetna-menadzer", {
         },
         pogledajPorudzbine : function(){
           router.push(`/pocetna/menadzer/porudzbine`);
+        },
+        pogledajKomentare : function(){
+          router.push(`/pocetna/menadzer/komentari`);
         }
     }
 });
