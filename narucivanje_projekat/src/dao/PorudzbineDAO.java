@@ -75,10 +75,11 @@ public class PorudzbineDAO {
 			svePorudzbine.add(p);
 		}
 		Kupac kupac = KorisniciDAO.pronadjiKupcaPoId(id);
+		Artikal a = ArtikliDAO.dobaviArtikalPoId(kupac.getKorpa().getArtikli().keySet().stream().findFirst().get());
 		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
 		Date date = new Date(System.currentTimeMillis());
 		
-		Porudzbina porudzbinaUpis = new Porudzbina(Long.toString(generisiId()), kupac.getKorpa().getIdRestoran(),
+		Porudzbina porudzbinaUpis = new Porudzbina(Long.toString(generisiId()), a.getRestoran(),
 													kupac.getKorpa().getArtikli(), kupac.getIdKorisnika(), date, 
 													kupac.getKorpa().getCena(),  TipPorudzbine.obrada );
 
@@ -147,9 +148,11 @@ public class PorudzbineDAO {
 			if (!kupac.getKorpa().getIdRestoran().equals(ArtikliDAO.dobaviArtikalPrekoId(porudzbineDto.getArtikalId()).getRestoran())) {
 				kupac.setKorpa(new Porudzbina());
 			}
+			else {
+				kupac.getKorpa().setIdRestoran(ArtikliDAO.dobaviArtikalPoId(porudzbineDto.getArtikalId()).getRestoran());
+			}
 		}
-		else {
-		}
+
 		Porudzbina porudzbina = kupac.getKorpa();
 		if (!porudzbina.getArtikli().containsKey(porudzbineDto.getArtikalId())) {
 			porudzbina.getArtikli().put(porudzbineDto.getArtikalId(), porudzbineDto.getKolicina());

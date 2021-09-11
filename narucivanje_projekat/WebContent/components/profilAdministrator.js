@@ -1,14 +1,29 @@
 Vue.component("profil-admin", {
     data: function () {
         return {
-          korisnik : {korisnickoIme : null, ime : null, prezime : null, datumRodjenja : null}
+         korisnik : {korisnik : null, uloga : null},
+         korisnikRegistracija : {korisnickoIme : null}
         }
     },
 
     mounted : function(){
-        axios.get('rest/currentUser').
-        then(response => this.korisnik = response.data).
-        catch(response => this.korisnik = response.data);
+         axios
+		    .get(
+		      `rest/currentUser`
+		    )
+		    .then(response => {
+		      this.korisnik = response.data;		
+		      axios
+		        .get(
+		         `rest/korisnikRegistracija/${this.korisnik.korisnik.idKorisnika}`
+		        )
+		        .then(response => {
+		          this.korisnikRegistracija = response.data;
+		      	  })
+		        .catch(err => {
+		          console.log(err);
+		        });
+		    });
     },
 
     template: `
@@ -19,10 +34,10 @@ Vue.component("profil-admin", {
             </div>
         </nav>
         <table>
-            <p>Ime korisnika: {{korisnik.ime}}</p>
-            <p>Prezime korisnika: {{korisnik.prezime}}</p>
-            <p>Korisnicko ime korisnika: {{korisnik.korisnickoIme}}</p>
-            <p>Datum rodjenja korisnika: {{korisnik.datumRodjenja}}</p>
+            <p>Ime korisnika: {{korisnik.korisnik.ime}}</p>
+            <p>Prezime korisnika: {{korisnik.korisnik.prezime}}</p>
+            <p>Korisnicko ime korisnika: {{korisnikRegistracija.korisnickoIme}}</p>
+            <p>Datum rodjenja korisnika: {{korisnik.korisnik.datumRodjenja}}</p>
         </table>
     </form>
     `

@@ -41,9 +41,9 @@ Vue.component("prikazi-restoran", {
             <img :src="'slike/' + restoran.logoRestorana"> 
             <p style="margin:0.3%;">{{restoran.naziv}}<p>
             <p style="margin:0.3%;">{{restoran.tipRestorana}}</p>
-            <p style="margin:0.3%;" v-if="restoran.status == true">Otvoren</p>
+            <p style="margin:0.3%;" v-if="restoran.statusRestorana == true">Otvoren</p>
             <p style="margin:0.3%;" v-else>Zatvoren</p>
-            <p>Dodati lokaciju</p>
+            <p>{{restoran.lokacijaRestorana.adresa}}</p>
 
             <h3 style="margin:0.3%;">U ponudi:</h3>
             <div class="card-deck" style="display:inline-block;">

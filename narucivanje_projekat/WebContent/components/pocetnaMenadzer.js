@@ -52,7 +52,7 @@ Vue.component("pocetna-menadzer", {
                 
                 <div class="ml-auto ">
                     <label class="offset-md-0.2" style="color:white">Dobrodosli, {{korisnik.korisnik.ime}}</label>
-                    <button class="btn btn-outline-success" type="submit">Odjavite se</button>
+                    <button class="btn btn-outline-success" v-on:click="odjava" type="submit">Odjavite se</button>
                 </div>
             </div>
         </nav>
@@ -96,6 +96,10 @@ Vue.component("pocetna-menadzer", {
         },
         pogledajKomentare : function(){
           router.push(`/pocetna/menadzer/komentari`);
+        },
+        odjava : function(){
+            axios.post(`rest/logout`).
+            then(router.push('/'));
         }
     }
 });

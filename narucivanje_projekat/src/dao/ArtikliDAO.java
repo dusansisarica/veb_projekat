@@ -72,9 +72,13 @@ public class ArtikliDAO {
 
 		Artikal artikalUpis = new Artikal(artikal.getNaziv(), artikal.getCena(), artikal.getTipArtikla(),
 				artikal.getRestoran(), artikal.getKolicina(), artikal.getOpis(), artikal.getSlikaArtikla());
-		if(artikli.containsKey(artikal.getNaziv())) {
-			return false;
+		ArrayList<Artikal> sviArtikli1 = new ArrayList<Artikal>();
+		for (Artikal a : artikli.values()) {
+			if(a.getNaziv().equals(artikal.getNaziv())){
+				return false;
+			}
 		}
+		
 		if(artikal.getNaziv() == null || artikal.getNaziv() == "") {
 			return false;
 		}
